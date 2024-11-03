@@ -99,7 +99,7 @@ import Vk from "@/components/icons/Vk.vue";
       width: rem(31);
       height: rem(31);
       border-radius: rem(3);
-      background-color: #fff;
+      background-color: var(--white);
       display: flex;
       justify-content: center;
       align-items: center;

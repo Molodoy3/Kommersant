@@ -9,10 +9,10 @@ import Pagination from "@/components/Pagination.vue";
 //для первоначального вывода новостей берем из get параметра текущий номер страинцы
 const route = useRoute();
 const currentDefaultPage = computed(() => {
-  return route.query.page || 1;
+  return Number(route.query.page) || 1;
 });
 
-const news = ref(null)
+const news = ref<any | null>(null)
 axios.post('/articles', {page: currentDefaultPage.value})
   .then(res => {
     news.value = res.data
@@ -24,8 +24,10 @@ axios.post('/articles', {page: currentDefaultPage.value})
 
 //небольшая функция для замены на норм текст кнопок
 function updateButtonLinks() {
-  news.value.links[0].label = 'Назад'
-  news.value.links[news.value.links.length - 1].label = 'Вперед'
+  if  (news.value && news.value.links) {
+    news.value.links[0].label = 'Назад'
+    news.value.links[news.value.links.length - 1].label = 'Вперед'
+  }
 }
 
 onMounted(() => {
@@ -37,7 +39,9 @@ const limitPages = 30;
 let isLoading = ref(false);
 const handleScroll = () => {
   //проверяем докрутили ли до конца новостей
-  if (window.innerHeight + window.scrollY >= document.querySelector('.news').clientHeight) {
+  //if (window.innerHeight + window.scrollY >= document.querySelector('.news').clientHeight) {
+  const newsElement = document.querySelector('.news');
+  if (newsElement && window.innerHeight + window.scrollY >= newsElement.clientHeight) {
     //проверяем не привышаем ли общее кол-во страниц
     if (news && currentPage < news.value.last_page) {
       //проверяем не привышаем ли лимит загруженных страниц
