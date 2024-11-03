@@ -1,0 +1,142 @@
+.page {
+    padding-top: rem(75);
+    flex: 1 1 auto;
+}
+:root {
+    --color-main: #000000;
+    --blue: #354daf;
+    --yellow: #cca81d;
+    --grey: #979797;
+    --white: #fff;
+    --yellow-hover: #c2a11c;
+    --yellow-hover2: #9e8319;
+    --red: red;
+    --main: #f5f5f5;
+}
+/*=============================================================================================================*/
+/*Основные стили /=============================================================================*/
+body {
+    font-size: rem($mainFontSize);
+    font-family: "Roboto", sans-serif;
+
+    &.lock {
+        overflow: hidden;
+    }
+}
+*{
+    line-height: 140%;
+}
+#app {
+    min-height: 100%;
+    width: 100%;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+}
+a {
+    color: inherit;
+}
+
+button {
+
+    background-color: transparent;
+}
+/*=============================================================================================================*/
+
+/*Общие блоки /=============================================================================*/
+section{
+    @include adaptiv-value('margin-bottom', 80, 40, 1);
+}
+.title {
+    @include adaptiv-value("font-size", 40, 28, 1);
+    font-weight: 700;
+    text-align: center;
+    @include adaptiv-value("margin-bottom", 40, 20, 1);
+    line-height: 135%;
+}
+.button {
+    padding: rem(9) rem(38);
+    @include adaptiv-value("border-radius", 14, 10, 1);
+    font-weight: 500;
+    display: inline-block;
+    background-color: var(--yellow);
+    color: var(--white);
+    transition: background-color 0.3s ease;
+    &:focus {
+        background-color: var(--yellow-hover);
+    }
+    @media (any-hover: hover) {
+        &:hover {
+            background-color: var(--yellow-hover);
+        }
+    }
+}
+/*=============================================================================================================*/
+/*=============================================================================================================*/
+.form {
+    &__item {
+        @include adaptiv-value("margin-bottom", 18, 12, 1);
+    }
+}
+
+.necessarily {
+    color: var(--red);
+}
+
+.input {
+    background-color: transparent;
+    &_readonly {
+        font-weight: 500;
+        color: var(--blue);
+        background: var(--main);
+    }
+    &_none {
+        display: none;
+    }
+}
+
+.label {
+    font-weight: 500;
+    margin-bottom: em(8, 18);
+    display: inline-block;
+}
+
+.textarea,
+.input {
+    font-size: rem(13);
+    border: 1px solid rgb(72, 72, 72);
+    @include adaptiv-value("border-radius", 10, 7, 1);
+
+    @include adaptiv-value("padding-top", 10, 7, 1);
+    @include adaptiv-value("padding-bottom", 10, 7, 1);
+    @include adaptiv-value("padding-left", 10, 5, 1);
+    @include adaptiv-value("padding-right", 10, 5, 1);
+    width: 100%;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: rem(100);
+}
+
+.button-border {
+    text-align: center;
+    border: 1px solid var(--yellow);
+    padding: rem(10) rem(38);
+    color: var(--yellow);
+    @include adaptiv-value("border-radius", 14, 10, 1);
+    transition: color 0.3s ease border-color 0.3s ease;
+
+    &:focus {
+        border: 1px solid var(--yellow-hover2);
+        color: var(--yellow-hover2);
+    }
+
+    @media (any-hover: hover) {
+        &:hover {
+            border: 1px solid var(--yellow-hover2);
+            color: var(--yellow-hover2);
+        }
+    }
+}
