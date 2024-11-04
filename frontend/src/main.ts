@@ -10,7 +10,8 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 
-axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
+//axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const app = createApp(App)
 
@@ -18,10 +19,10 @@ app.use(createPinia())
 app.use(router)
 app.use(createMetaManager())
 app.use(VueLazyLoad, {
-  preLoad: 1.3,
+  //preLoad: 1.3,
   //error: '',
-  loading: '/img/icons/preloader.gif',
-  attempt: 1
+  //loading: '/img/icons/preloader.gif',
+  //attempt: 1
 })
 
 

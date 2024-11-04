@@ -20,6 +20,15 @@ class ArticleController extends Controller
                     return $item;
                 })
         );
+    }
+    public function get($id)
+    {
+        $article = Article::find($id);
 
+        if (!$article) {
+            return response()->json(['message' => 'Article not found'], 404);
+        }
+
+        return response()->json($article);
     }
 }

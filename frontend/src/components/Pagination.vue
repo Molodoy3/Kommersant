@@ -28,7 +28,7 @@ const { links } = toRefs(props);
 @use 'sass:math';
 @import '../assets/scss/functions';
 
-.pagination Я{
+.pagination{
   display: flex;
   flex-wrap: wrap;
   overflow-x: auto;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {RouterLink} from "vue-router";
+import { RouterLink } from "vue-router";
 import Tg from "@/components/icons/Tg.vue";
 import WhatsApp from "@/components/icons/WhatsApp.vue";
 import Vk from "@/components/icons/Vk.vue";
@@ -16,11 +16,11 @@ import Vk from "@/components/icons/Vk.vue";
         <div class="footer__links">
           <ul class="footer__social-list">
             <li><a href="">
-              <tg />
-            </a></li>
+                <tg />
+              </a></li>
             <li><a href="">
-              <vk />
-            </a></li>
+                <vk />
+              </a></li>
             <li><a href=""><whats-app /></a></li>
           </ul>
           <ul class="footer__list">
@@ -80,7 +80,10 @@ import Vk from "@/components/icons/Vk.vue";
   }
 
   &__links {
-    width: 100%;
+    @media (max-width: $md3){
+
+      width: 100%;
+    }
   }
 
   &__social-list {

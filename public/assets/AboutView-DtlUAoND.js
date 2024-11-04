@@ -1,1 +1,0 @@
-import{_ as t,c as o,a as s,b as a,o as c}from"./index-Dy_sH1nD.js";const n={},r={class:"about"};function d(_,e){return c(),o("div",r,e[0]||(e[0]=[s("h1",null,[a("This is an "),s("span",null,"sdfsdf"),a(" page")],-1)]))}const f=t(n,[["render",d],["__scopeId","data-v-170c1d52"]]);export{f as default};

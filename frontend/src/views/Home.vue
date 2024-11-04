@@ -23,8 +23,8 @@ let users = ref()
 <template>
   <section class="welcome">
     <picture>
-      <source srcset='/img/welcome/bg.webp' type='image/webp'>
-      <img src='/img/welcome/bg.jpeg' alt='фон'>
+      <source v-lazy='"/img/welcome/bg.webp"' type='image/webp'>
+      <img v-lazy='"/img/welcome/bg.jpeg"' alt='фон'>
     </picture>
     <div class='welcome__container'>
       <h1 class="welcome__title title">Агенство недвижимости
@@ -44,8 +44,8 @@ let users = ref()
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source srcset='/img/team/artem.webp' type='image/webp'>
-              <img src='/img/team/artem.jpg' alt='Артём'>
+              <source v-lazy="'/img/team/artem.webp'" type='image/webp'>
+              <img v-lazy="'/img/team/artem.jpg'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item">Главный IT специалист</h5>
@@ -54,8 +54,8 @@ let users = ref()
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source srcset='/img/team/djavad.webp' type='image/webp'>
-              <img src='/img/team/djavad.jpg' alt='Артём'>
+              <source v-lazy="'/img/team/djavad.webp'" type='image/webp'>
+              <img v-lazy="'/img/team/djavad.jpg'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item">Директор</h5>
@@ -65,8 +65,8 @@ let users = ref()
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source srcset='/img/team/vasa.webp' type='image/webp'>
-              <img src='/img/team/vasa.jpg' alt='Артём'>
+              <source v-lazy="'/img/team/vasa.webp'" type='image/webp'>
+              <img v-lazy="'/img/team/vasa.jpg'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item"> Маркетолог</h5>

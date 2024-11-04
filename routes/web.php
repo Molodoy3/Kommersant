@@ -11,7 +11,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api'], function () {
 
     Route::post('/application', [ApplicationController::class, 'store']);
-    Route::post('/articles', [ArticleController::class, 'index']);
+
+    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/articles/{id}', [ArticleController::class, 'get']);
 
 });
 

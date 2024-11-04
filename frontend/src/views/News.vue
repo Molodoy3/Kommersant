@@ -5,6 +5,7 @@ import {onMounted, ref} from "vue";
 import {computed} from 'vue';
 import {useRoute} from 'vue-router';
 import Pagination from "@/components/Pagination.vue";
+import Preloader from "@/components/Preloader.vue";
 
 //для первоначального вывода новостей берем из get параметра текущий номер страинцы
 const route = useRoute();
@@ -13,7 +14,10 @@ const currentDefaultPage = computed(() => {
 });
 
 const news = ref<any | null>(null)
-axios.post('/articles', {page: currentDefaultPage.value})
+axios.get('/articles', {
+  params: {
+    page: currentDefaultPage.value
+  }})
   .then(res => {
     news.value = res.data
     updateButtonLinks()
@@ -24,7 +28,7 @@ axios.post('/articles', {page: currentDefaultPage.value})
 
 //небольшая функция для замены на норм текст кнопок
 function updateButtonLinks() {
-  if  (news.value && news.value.links) {
+  if (news.value && news.value.links) {
     news.value.links[0].label = 'Назад'
     news.value.links[news.value.links.length - 1].label = 'Вперед'
   }
@@ -43,7 +47,7 @@ const handleScroll = () => {
   const newsElement = document.querySelector('.news');
   if (newsElement && window.innerHeight + window.scrollY >= newsElement.clientHeight) {
     //проверяем не привышаем ли общее кол-во страниц
-    if (news && currentPage < news.value.last_page) {
+    if (news.value && currentPage < news.value.last_page) {
       //проверяем не привышаем ли лимит загруженных страниц
       if (currentPage - currentDefaultPage.value < limitPages) {
         //загружаем
@@ -51,8 +55,11 @@ const handleScroll = () => {
         if (!isLoading.value) {
           isLoading.value = true;
           currentPage++;
-          console.log(currentPage)
-          axios.post('/articles', {page: currentPage})
+          axios.get('/articles', {
+            params: {
+              page: currentPage
+            }
+          })
             .then(res => {
               news.value.data = [...news.value.data, ...res.data.data]
               news.value.links = res.data.links
@@ -89,14 +96,12 @@ const handleScroll = () => {
           <div class="news__text">{{ item.description }}</div>
           <div class="news__bottom">
             <div class="news__date">{{ item.created_at }}</div>
-            <RouterLink to="" class="news__button button">Читать</RouterLink>
+            <RouterLink :to="{ name: 'new', params: { id: item.id } }" class="news__button button">Читать</RouterLink>
           </div>
         </article>
-        <div v-else>
-          загрузка
-        </div>
       </div>
-      <div v-if="isLoading">Загрузка</div>
+      <Preloader v-else/>
+      <Preloader v-if="isLoading"/>
       <Pagination v-if="!isLoading && news && news.links" :links="news.links"/>
     </div>
   </section>
@@ -147,9 +152,7 @@ const handleScroll = () => {
       height: 100%;
       object-fit: cover;
 
-      &[lazy=loading] {
-        object-fit: contain;
-      }
+
     }
   }
 
@@ -177,6 +180,7 @@ const handleScroll = () => {
 
   &__date {
     padding: rem(3) rem(10);
+    border-radius: rem(4);
     color: var(--grey);
     background-color: rgb(245, 245, 245);
   }
@@ -186,5 +190,4 @@ const handleScroll = () => {
     padding: rem(5) rem(40);
   }
 }
-
 </style>
