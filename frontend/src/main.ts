@@ -10,7 +10,7 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 
-axios.defaults.baseURL = 'http://127.0.0.1/api';
+axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
 
 const app = createApp(App)
 
