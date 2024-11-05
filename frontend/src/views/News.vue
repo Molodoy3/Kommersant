@@ -84,11 +84,11 @@ const handleScroll = () => {
   <section class="news">
     <div class='news__container'>
       <h1 class="news__title title">Все новости</h1>
-      <div class="news__items">
-        <article v-if="news && news.data" v-for="item in news.data" class="news__item">
+      <div v-if="news && news.data" class="news__items">
+        <article v-for="item in news.data" class="news__item">
           <div class="news__image">
             <picture>
-              <!--              <source :srcset='item.image' type='image/webp'>-->
+              <source :srcset='item.image + ".webp"' type='image/webp'>
               <img v-lazy='item.image' alt='фон'>
             </picture>
           </div>
