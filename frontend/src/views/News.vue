@@ -88,8 +88,8 @@ const handleScroll = () => {
         <article v-for="item in news.data" class="news__item">
           <div class="news__image">
             <picture>
-              <source :srcset='item.image + ".webp"' type='image/webp'>
-              <img v-lazy='item.image' alt='фон'>
+              <source :data-srcset='item.image + ".webp"'  type='image/webp'>
+              <img v-lazy='item.image + "." + item.image_extension' alt='фон'>
             </picture>
           </div>
           <h3 class="news__title-new">{{ item.title }}</h3>

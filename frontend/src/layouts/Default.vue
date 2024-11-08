@@ -56,7 +56,7 @@ async function submitApplication() {
           <h2 class="window-application__title title">Отправьте заявку и мы свяжемся с вами в ближайшее время</h2>
           <form @submit.prevent="submitApplication" class="window-application__form form">
             <div class="form__item">
-              <input type="text" value="" class="input input_readonly input_none"
+              <input id="serviceText" type="text" value="" class="input input_readonly input_none"
                 readonly />
             </div>
             <div class="form__item">

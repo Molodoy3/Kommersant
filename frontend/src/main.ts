@@ -12,6 +12,21 @@ import router from './router'
 
 //axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.withCredentials = true;
+async function getCsrfToken() {
+  try {
+    //const response = await axios.get('/csrf-token');
+    //return response.data.csrfToken;
+  } catch (error) {
+    console.error('Ошибка при получении CSRF-токена:', error);
+  }
+}
+// Вызов функции и установка токена в заголовки
+getCsrfToken().then(csrfToken => {
+  if (csrfToken) {
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+  }
+});
 
 const app = createApp(App)
 

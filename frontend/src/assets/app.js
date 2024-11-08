@@ -10,7 +10,7 @@
 //?Основные скрипты (делегирование, шапка)
 import { delegationClick } from './modules/script.js';
 //?Для открытия, закрытия бургера обязательно добавить эту ф-ию (только импортировать, запускать не надо)
-//import { closeMenu } from './modules/script.js';
+import { closeMenu } from './modules/script.js';
 
 
 //?Функция определения мобильного устройства
@@ -30,6 +30,7 @@ import { delegationClick } from './modules/script.js';
 window.addEventListener("load", windowLoad);
 
 function windowLoad() {
+
   delegationClick();
 
   //?Создание плавного скролла

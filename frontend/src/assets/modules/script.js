@@ -8,7 +8,10 @@ export function delegationClick() {
       const menuBody = document.querySelector('.menu__body');
       menuBody.classList.toggle('open');
       targetElement.closest('.menu__icon').classList.toggle('active');
-      document.body.classList.toggle('lock');
+      if (menuBody.classList.contains('open'))
+        document.body.classList.add('lock');
+      else
+        document.body.classList.remove('lock');
 
       if (menuBody.classList.contains('open')) {
         window.addEventListener('resize', closeMenu);
@@ -64,113 +67,114 @@ export function delegationClick() {
     //?Открывание мобального окна (по классу open)
     //атрибуты: data-button-for-open-custom-popup="popup" - кнопка открывания; data-custom-popup="popup" - попап; data-close-for-custom-popup - кнопка закрывания (обязательно внутри попапа);  data-custom-popup-content - контентная оболочка (внутри попапа внутри body попапа).
     if (targetElement.closest("[data-close-for-custom-popup]")) {
-        const popup = targetElement.closest("[data-custom-popup]");
-        if (popup) {
-            popup.classList.remove('open');
-            //Устранение дергания при убирании скрола
-             document.body.classList.remove("lock");
-            document.body.style.paddingRight = 0;
-            const header = document.querySelector("header");
-            if (header) {
-                header.style.paddingRight = 0;
-            }
+      const popup = targetElement.closest("[data-custom-popup]");
+      if (popup) {
+        popup.classList.remove('open');
+        //Устранение дергания при убирании скрола
+        document.body.classList.remove("lock");
+        document.body.style.paddingRight = 0;
+        const header = document.querySelector("header");
+        if (header) {
+          header.style.paddingRight = 0;
         }
+
+        //дополнительно для поля услуги
+        const inputServiceText = popup.querySelector('#serviceText');
+        inputServiceText.value = '';
+        inputServiceText.classList.add('input_none');
+      }
     }
     if (targetElement.closest("[data-button-for-open-custom-popup]")) {
-        const popupName = targetElement.closest("[data-button-for-open-custom-popup]").dataset.buttonForOpenCustomPopup;
-        const popup = document.querySelector(`[data-custom-popup="${popupName}"]`);
-        if (popup) {
-            popup.classList.add('open');
-            //Устранение дергания при убирании скрола
-            const lockPaddingValue = window.innerWidth - document.body.offsetWidth + 'px';
-            document.body.style.paddingRight = lockPaddingValue;
-            document.body.classList.add("lock");
-            const header = document.querySelector("header");
-            if (header) {
-                header.style.paddingRight = lockPaddingValue;
-            }
-
-            e.preventDefault();
+      const popupName = targetElement.closest("[data-button-for-open-custom-popup]").dataset.buttonForOpenCustomPopup;
+      const popup = document.querySelector(`[data-custom-popup="${popupName}"]`);
+      if (popup) {
+        popup.classList.add('open');
+        //Устранение дергания при убирании скрола
+        const lockPaddingValue = window.innerWidth - document.body.offsetWidth + 'px';
+        document.body.style.paddingRight = lockPaddingValue;
+        document.body.classList.add("lock");
+        const header = document.querySelector("header");
+        if (header) {
+          header.style.paddingRight = lockPaddingValue;
         }
+
+        //дополнительно для добавления поля услуги
+        const dataServicePopup = targetElement.closest("[data-service-popup]");
+        if (dataServicePopup) {
+          const textService = dataServicePopup.dataset.servicePopup;
+
+          const inputServiceText = popup.querySelector('#serviceText');
+          inputServiceText.value = textService;
+          inputServiceText.classList.remove('input_none');
+        }
+
+        e.preventDefault();
+      }
     } else if (!targetElement.closest("[data-custom-popup].open [data-custom-popup-content]")) {
-        const popup = document.querySelector("[data-custom-popup].open");
-        if (popup) {
-            popup.classList.remove('open');
+      const popup = document.querySelector("[data-custom-popup].open");
+      if (popup) {
+        popup.classList.remove('open');
 
-            //Устранение дергания при убирании скрола
-            document.body.classList.remove("lock");
-            document.body.style.paddingRight = 0;
-            const header = document.querySelector("header");
-            if (header) {
-                header.style.paddingRight = 0;
-            }
+        //Устранение дергания при убирании скрола
+        document.body.classList.remove("lock");
+        document.body.style.paddingRight = 0;
+        const header = document.querySelector("header");
+        if (header) {
+          header.style.paddingRight = 0;
         }
+
+        //дополнительно для поля услуги
+        const inputServiceText = popup.querySelector('#serviceText');
+        inputServiceText.value = '';
+        inputServiceText.classList.add('input_none');
+      }
     }
 
     //?Табы
-    //Это добавить в app.js, если изначально видны не все элементы в табах, а только определенной категории
-    /*
-    if (tabs.length) {
-        tabs.forEach(tab => {
-            const activeFilter = tab.querySelector('.active');
-            if (activeFilter) {
-                const filterValue = activeFilter.dataset.filter;
-                if (filterValue != '*') {
-                    tab.querySelectorAll('[data-filter-item]').forEach(filterItem => {
-                        if (filterItem.dataset.filterItem != filterValue) {
-                            filterItem.style.cssText = `position: absolute;opacity: 0;`;
-                        }
-                    });
-                }
-            }
+    if (targetElement.closest('[data-filter]')) {
+      const itemFilter = targetElement.closest('[data-filter]');
+      const filterValue = itemFilter.dataset.filter;
+      const tabs = itemFilter.closest('[data-tabs]');
+      tabs.querySelectorAll('[data-filter]').forEach(item => { item.classList.remove('active') });
+      itemFilter.classList.add('active');
+      const tabsItems = tabs.querySelectorAll('[data-filter-item]');
+      const durationAnimation = 300;
+      if (filterValue === "*") {
+        tabsItems.forEach(item => {
+          if (item.style.position !== 'absolute') {
+            item.style.cssText = `opacity: 0;`;
+            setTimeout(() => {
+              item.style.cssText = `position: absolute;opacity: 0;top: 0;`;
+            }, durationAnimation);
+          }
         });
-    }
-    */
-    //Основной код
-    /*if (targetElement.closest('[data-filter]')) {
-        const itemFilter = targetElement.closest('[data-filter]');
-        const filterValue = itemFilter.dataset.filter;
-        const tabs = itemFilter.closest('[data-tabs]');
-        tabs.querySelectorAll('[data-filter]').forEach(item => { item.classList.remove('active') });
-        itemFilter.classList.add('active');
-        const tabsItems = tabs.querySelectorAll('[data-filter-item]');
-        const durationAnimation = 300;
-        if (filterValue === "*") {
-            tabsItems.forEach(item => {
-                if (item.style.position !== 'absolute') {
-                    item.style.cssText = `opacity: 0;`;
-                    setTimeout(() => {
-                        item.style.cssText = `position: absolute;opacity: 0;top: 0;`;
-                    }, durationAnimation);
-                }
-            });
 
+        setTimeout(() => {
+          tabsItems.forEach(item => {
+            item.style.cssText = ``;
+            setTimeout(() => { item.style.cssText = `opacity: 1;`; }, 100);
+          });
+        }, durationAnimation);
+      } else {
+        tabsItems.forEach(item => {
+          if (item.style.position !== 'absolute') {
+            item.style.cssText = `opacity: 0;`;
             setTimeout(() => {
-                tabsItems.forEach(item => {
-                    item.style.cssText = ``;
-                    setTimeout(() => { item.style.cssText = `opacity: 1;`; }, 100);
-                });
+              item.style.cssText = `position: absolute;opacity: 0;top: 0;`;
             }, durationAnimation);
-        } else {
-            tabsItems.forEach(item => {
-                if (item.style.position !== 'absolute') {
-                    item.style.cssText = `opacity: 0;`;
-                    setTimeout(() => {
-                        item.style.cssText = `position: absolute;opacity: 0;top: 0;`;
-                    }, durationAnimation);
-                }
-            });
-            setTimeout(() => {
-                tabsItems.forEach(item => {
-                    if (item.dataset.filterItem === filterValue) {
-                        item.style.cssText = ``;
-                        setTimeout(() => { item.style.cssText = `opacity: 1;`; }, 100);
-                    }
-                });
-            }, durationAnimation);
-        }
-        e.preventDefault();
-    }*/
+          }
+        });
+        setTimeout(() => {
+          tabsItems.forEach(item => {
+            if (item.dataset.filterItem === filterValue) {
+              item.style.cssText = ``;
+              setTimeout(() => { item.style.cssText = `opacity: 1;`; }, 100);
+            }
+          });
+        }, durationAnimation);
+      }
+      e.preventDefault();
+    }
 
     //?Пульсирующий эффект (Ripple Effect)
     //Надо для работы - атрубыт data-ripple со значение once, если надо только максимум один круг выводить

@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use App\Services\ImageConverter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //::compression('articles/image.jpeg');
-        //ImageConverter::convertWebp('articles/image.jpeg');
 
 
         return response()->json(
@@ -24,8 +22,8 @@ class ArticleController extends Controller
                     $item->description = Str::limit($item->description, 150, '...');
 
                     //у картинки убираем расширение, его берем отдельно
-                    $item->image = pathinfo($item->image, PATHINFO_FILENAME);
                     $item->image_extension = pathinfo($item->image, PATHINFO_EXTENSION);
+                    $item->image = pathinfo($item->image, PATHINFO_FILENAME);
 
                     return $item;
                 })

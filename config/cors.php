@@ -1,5 +1,5 @@
 <?php
-
+$parsedUrl = parse_url(env('APP_URL'));
 return [
 
     /*
@@ -20,6 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => ['*'],
+    //вместо * лучше указать домен без порта, как ниже, но на локальной это не работает, так как даже домены разные
+    //$parsedUrl['scheme'] . '://' . $parsedUrl['host']
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +31,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

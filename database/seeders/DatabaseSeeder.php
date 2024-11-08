@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\Category;
+use App\Models\Service;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +22,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);*/
-        Article::factory()->count(100)->create();
+        //Article::factory()->count(100)->create();
+        //Category::factory()->count(3)->create();
+        //Service::factory()->count(20)->create();
     }
 }
