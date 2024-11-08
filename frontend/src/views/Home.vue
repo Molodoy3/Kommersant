@@ -36,11 +36,11 @@ watchEffect(async () => {
     const tabs = document.querySelectorAll('[data-tabs]');
     if (tabs.length) {
       tabs.forEach(tab => {
-        const activeFilter = tab.querySelector('.active');
+        const activeFilter = tab.querySelector('.active') as HTMLElement;
         if (activeFilter) {
           const filterValue = activeFilter.dataset.filter;
           if (filterValue != '*') {
-            tab.querySelectorAll('[data-filter-item]').forEach(filterItem => {
+            tab.querySelectorAll<HTMLElement>('[data-filter-item]').forEach(filterItem => {
               if (filterItem.dataset.filterItem != filterValue) {
                 filterItem.style.cssText = `position: absolute;opacity: 0;`;
               }

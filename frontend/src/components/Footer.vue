@@ -132,7 +132,7 @@ import Vk from "@/components/icons/Vk.vue";
 
     display: flex;
     @include adaptiv-value('column-gap', 44, 20, 1);
-    color: #fff;
+    color: var(--white);
     row-gap: rem(5);
     flex-wrap: wrap;
 

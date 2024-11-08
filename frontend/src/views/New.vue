@@ -20,8 +20,8 @@ axios.get('/articles/' + idNew)
       <div class="new__header">
         <div class="new__image">
           <picture>
-            <!-- <source srcset='@img/.webp' type='image/webp'> -->
-            <img v-lazy='article.image' alt='картинка новости'>
+            <source :data-srcset='article.image + ".webp"'  type='image/webp'>
+            <img v-lazy='article.image + "." + article.image_extension' alt='фон'>
           </picture>
         </div>
         <div class="new__info">
