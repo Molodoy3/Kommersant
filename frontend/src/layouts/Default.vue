@@ -1,11 +1,8 @@
 <script setup lang="ts">
 
-import { RouterLink, RouterView } from "vue-router";
-import { ref} from "vue";
-import Tg from "@/components/icons/Tg.vue";
-import Vk from "@/components/icons/Vk.vue";
-import WhatsApp from "@/components/icons/WhatsApp.vue";
-import { useMeta } from "vue-meta";
+import {RouterLink, RouterView} from "vue-router";
+import {ref} from "vue";
+import {useMeta} from "vue-meta";
 import axios from "axios";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
@@ -26,8 +23,12 @@ async function submitApplication() {
   formData.append('tel', tel.value);
   formData.append('message', message.value);
 
+  //console.log(csrfToken)
+  //formData.append('_token', csrfToken);
   try {
-    const response = await axios.post('/application', formData);
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
+
+    const response = await axios.post('/application/store', formData);
     console.log('Успех:', response.data);
   } catch (error) {
     console.error('Ошибка:', error);

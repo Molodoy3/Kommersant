@@ -32,6 +32,8 @@ class ArticleController extends Controller
     public function get($id)
     {
         $article = Article::find($id);
+        $article->image_extension = pathinfo($article->image, PATHINFO_EXTENSION);
+        $article->image = pathinfo($article->image, PATHINFO_FILENAME);
 
         if (!$article) {
             return response()->json(['message' => 'Article not found'], 404);

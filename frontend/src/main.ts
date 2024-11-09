@@ -12,6 +12,10 @@ import router from './router'
 
 //axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+
+//ОЧЕНЬ ВАЖНО ВКЛЮЧИТЬ ПЕРЕДАЧУ КУКИ ПРИ ЗАПРОСАХ, ТАК КАК ТАМ ХРАНЯТЬСЯ ДАННЫЕ СЕССИИ И ЕСЛИ НЕ ПЕРЕДАВАТЬ, ТО
+//СЕССИИ В LARAVEL БУДУТ СОЗДАВАТЬСЯ ПОССТОЯННО НОВЫЕ, ТАК КАК НЕ БУДУТ ПРОХОДИТЬ ПРОВЕРКУ
+//В LARAVEL ТАКЖЕ В config/cors для сессий устанавливаем true поле 'supports_credentials' => true,
 axios.defaults.withCredentials = true;
 /*async function getCsrfToken() {
   try {
@@ -27,6 +31,7 @@ getCsrfToken().then(csrfToken => {
     //axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
   }
 });*/
+
 
 const app = createApp(App)
 

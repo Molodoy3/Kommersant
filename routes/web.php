@@ -14,15 +14,15 @@ Route::get('/', function () {
 
 
 //для токена
-Route::prefix('api')->get('/csrf-token', function () {
-    //$token = csrf_token();
-    //$token = Session::getId();
-    //return response()->json(['csrfToken' => $token]);
-});
+
 
 Route::group(['prefix' => 'api', 'middleware' => ['throttle:api', CheckApiToken::class]], function () {
 
-
+    Route::get('/csrf-token', function () {
+        $token = csrf_token();
+        //$token = Session::getId();
+        return $token;
+    });
 
     Route::get('/articles', [ArticleController::class, 'index']);
     Route::get('/articles/{id}', [ArticleController::class, 'get']);
