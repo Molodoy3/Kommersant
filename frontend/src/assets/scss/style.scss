@@ -113,6 +113,11 @@ section{
     &__item {
         @include adaptiv-value("margin-bottom", 18, 12, 1);
     }
+    &__error{
+        font-size: rem(11);
+        color: var(--red);
+        margin-top: rem(3);
+    }
 }
 
 .necessarily {
@@ -129,6 +134,7 @@ section{
     &_none {
         display: none;
     }
+
 }
 
 .label {
@@ -148,6 +154,9 @@ section{
     @include adaptiv-value("padding-left", 10, 5, 1);
     @include adaptiv-value("padding-right", 10, 5, 1);
     width: 100%;
+    &.error{
+        border: 1px solid var(--red);
+    }
 }
 
 .textarea {

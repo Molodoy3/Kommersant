@@ -394,7 +394,7 @@
           // String
           this[i].setAttribute(attrs, value);
         } else {
-          // Object
+          // Property
           for (const attrName in attrs) {
             this[i][attrName] = attrs[attrName];
             this[i].setAttribute(attrName, attrs[attrName]);

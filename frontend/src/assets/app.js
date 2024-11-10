@@ -3,8 +3,7 @@
 //?Импорт кастомного открывания картинок (снипет doi)
 //import customOpenImage from './modules/customOpenImage.js';
 //?Импор Свайпера (снипет swp)
-//import Swiper from 'swiper';
-//import { Navigation, Pagination } from 'swiper/modules';
+
 
 
 //?Основные скрипты (делегирование, шапка)

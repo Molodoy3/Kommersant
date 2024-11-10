@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {RouterLink, RouterView} from "vue-router";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useMeta} from "vue-meta";
 import axios from "axios";
 import Header from "@/components/Header.vue";
@@ -13,23 +13,47 @@ useMeta({
   meta: [{ name: 'keywords', content: '45,45' }]
 })
 
+const errors = ref<any>({});
 
 const name = ref('');
 const tel = ref('');
 const message = ref('');
+const service = ref('');
+
 async function submitApplication() {
   const formData = new FormData();
+
+  //ПОМЕНЯТЬ РЕАКТИВНЫЕ НА ФОРМДАТУ, ЗАДАТЬ ВСЕМ ИНПУТАМ name
+  const form = document.forms.namedItem('application') as HTMLFormElement | null;
+  if (form) {
+    const formData2 = new FormData(form);
+    const formDataArray = Array.from(formData2.entries()).map(([key, value]) => {
+      return { key, value }; // Создаем объект с ключом и значением
+    });
+    // Выводим массив
+    console.log(formDataArray);
+  }
+
+
+
   formData.append('name', name.value);
-  formData.append('tel', tel.value);
-  formData.append('message', message.value);
+  formData.append('telephone', tel.value);
+  formData.append('comment', message.value);
+  service.value ? formData.append('service', message.value) : null;
 
   //console.log(csrfToken)
   //formData.append('_token', csrfToken);
   try {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
 
-    const response = await axios.post('/application/store', formData);
-    console.log('Успех:', response.data);
+    const response = await axios.post('/application/store', formData)
+      .catch(error => {
+        if (error.response.status === 422) {
+          errors.value = error.response.data.errors;
+          console.log(errors.value)
+        }
+      });
+    //console.log('Успех:', response.data);
   } catch (error) {
     console.error('Ошибка:', error);
   }
@@ -55,22 +79,31 @@ async function submitApplication() {
             </button>
           </div>
           <h2 class="window-application__title title">Отправьте заявку и мы свяжемся с вами в ближайшее время</h2>
-          <form @submit.prevent="submitApplication" class="window-application__form form">
+          <form name="application" @submit.prevent="submitApplication" class="window-application__form form">
             <div class="form__item">
-              <input id="serviceText" type="text" value="" class="input input_readonly input_none"
+              <input v-model="service" id="serviceText" type="text" class="input input_readonly input_none"
                 readonly />
             </div>
             <div class="form__item">
               <label for="name" class="label">Как вас зовут?<span class="necessarily">*</span></label>
-              <input v-model="name" id="name" type="text" placeholder="Имя" class="input" />
+              <input name="name"
+                :class="errors.name ? 'error' : null"
+                v-model="name" id="name" type="text" placeholder="Имя" class="input" />
+              <div v-if="errors.name" class="form__error">{{ errors.name[0] }}</div>
             </div>
             <div class="form__item">
               <label for="tel" class="label">Ваш номер телефона для связи<span class="necessarily">*</span></label>
-              <input v-model="tel" id="tel" type="tel" placeholder="+7" class="input" />
+              <input
+                :class="errors.telephone ? 'error' : null"
+                v-model="tel" id="tel" type="tel" placeholder="+7" class="input" />
+              <div v-if="errors.telephone" class="form__error">{{ errors.telephone[0] }}</div>
             </div>
             <div class="form__item">
               <label for="message" class="label">Комментарий</label>
-              <textarea v-model="message" id="message" class="textarea"></textarea>
+              <textarea
+                :class="errors.comment ? 'error' : null"
+                v-model="message" id="message" class="textarea"></textarea>
+              <div v-if="errors.comment" class="form__error">{{ errors.comment[0] }}</div>
             </div>
             <button class="button-border" type="submit">Отправить</button>
           </form>

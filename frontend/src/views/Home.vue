@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 //import axios from "axios";
-import {onMounted, ref, watchEffect, nextTick} from "vue";
+import { onMounted, ref, watchEffect, nextTick } from "vue";
 import Adv01 from "@/components/icons/Adv-01.vue";
 import Adv02 from "@/components/icons/Adv-02.vue";
 import Adv03 from "@/components/icons/Adv-03.vue";
@@ -10,7 +10,7 @@ import axios from "axios";
 import Preloader from "@/components/Preloader.vue";
 
 let categories = ref<any | null>(null)
-axios.get('/categories', {withCredentials: true})
+axios.get('/categories', { withCredentials: true })
   .then(res => {
     categories.value = res.data
   })
@@ -21,6 +21,15 @@ let services = ref<any | null>(null)
 axios.get('/services')
   .then(res => {
     services.value = res.data
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+
+let properties = ref<any | null>(null)
+axios.get('/properties-recent')
+  .then(res => {
+    properties.value = res.data
   })
   .catch((error) => {
     console.log(error)
@@ -67,11 +76,37 @@ watchEffect(async () => {
       <div class="welcome__text">надежное агентство недвижимости, предлагающее услуги по покупке, продаже и аренде в
         Пермском крае
       </div>
-      <a href="#objects" class="welcome__button button">Смотреть объекты</a>
+      <a href="#properties" class="welcome__button button">Смотреть объекты</a>
     </div>
   </section>
-  <section id="objects" class="objects">
-
+  <section id="properties" class="properties">
+    <div v-if="properties" class='properties__container'>
+      <h2 class="properties__title title">Объекты в продаже</h2>
+      <div class="properties__items">
+        <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties" class="properties__item">
+          <div class="properties__image">
+            <picture>
+              <source :data-srcset='property.image + ".webp"' type='image/webp'>
+              <img v-lazy='property.image + "." + property.image_extension' alt='объект недвижимости'>
+            </picture>
+            <div class="properties__labels">
+              <div
+                :style="'background-color: #' + label.color"
+                v-for="label in property.labels" class="properties__label">{{ label.name }}</div>
+            </div>
+          </div>
+          <div class="properties__content">
+            <h4 class="properties__title-item">{{ property.name }}</h4>
+            <div class="properties__price">{{ property.prise }}р.</div>
+            <ul class="properties__parameters">
+              <li>— {{ property.address }}</li>
+              <li>— {{ property.square }}м²</li>
+            </ul>
+          </div>
+        </RouterLink>
+      </div>
+    </div>
+    <Preloader v-else />
   </section>
   <section class="advantages">
     <div class='advantages__container'>
@@ -79,54 +114,53 @@ watchEffect(async () => {
       <div class="advantages__items">
         <div class="advantages__item">
           <div class="advantages__icon">
-            <Adv01/>
+            <Adv01 />
           </div>
           <div class="advantages__text">Индивидуальный подход к клиентам</div>
         </div>
         <div class="advantages__item">
           <div class="advantages__icon">
-            <Adv02/>
+            <Adv02 />
           </div>
           <div class="advantages__text">Профессиональное сопровождение сделок
           </div>
         </div>
         <div class="advantages__item">
           <div class="advantages__icon">
-            <Adv03/>
+            <Adv03 />
           </div>
           <div class="advantages__text">Широкий выбор объектов недвижимости</div>
         </div>
         <div class="advantages__item">
           <div class="advantages__icon">
-            <Adv04/>
+            <Adv04 />
           </div>
           <div class="advantages__text">Опыт и экспертиза специалистов</div>
         </div>
       </div>
     </div>
   </section>
-  <section class="services">
+  <section id="services" class="services">
     <div v-if="categories && services" data-tabs class='services__container'>
-      <h2 class="services__title title"></h2>
+      <h2 class="services__title title">Наши услуги</h2>
       <div class="services__filter">
         <ul class="services__filter__wrap">
           <li v-for="(category, index) in categories">
-            <button :data-filter="category.id" type="button"
-                    :class="{ active: index === 0 }">{{ category.name }}
+            <button :data-filter="category.id" type="button" :class="{ active: index === 0 }">{{ category.name }}
             </button>
           </li>
         </ul>
       </div>
       <div class="services__tabs">
         <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
-             v-for="service in services" :data-filter-item="service.category_id" class="services__item">
+          v-for="service in services" :data-filter-item="service.category_id" class="services__item">
           <h5 class="services__title-item">{{ service.title }}</h5>
           <div class="services__description">{{ service.description }}</div>
           <div class="services__price">{{ service.price }}₽</div>
         </div>
       </div>
     </div>
-    <Preloader v-else/>
+    <Preloader v-else />
   </section>
   <section class="team">
     <div class='team__container'>
@@ -176,13 +210,96 @@ watchEffect(async () => {
 @import '../assets/scss/functions';
 
 
+.properties {
+
+  &__container {}
+
+  &__title {}
+
+  &__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(rem(270), 1fr));
+    @include adaptiv-value('gap', 30, 15, 1);
+  }
+
+  &__item {
+    @include adaptiv-value('border-radius', 14, 10, 1);
+    overflow: hidden;
+    box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.11);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s ease-out;
+    &:focus {
+        transform: scale(1.1);
+    }
+    @media (any-hover: hover) {
+        &:hover{
+            transform: scale(1.05);
+        }
+    }
+  }
+
+  &__image {
+    @include adaptiv-value('height', 210, 170, 1);
+    position: relative;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  &__title-item{
+    color: var(--blue);
+    margin-bottom: em(10, 16);
+    font-weight: 700;
+  }
+  &__labels {
+    position: absolute;
+    top: rem(15);
+    right: rem(13);
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(5);
+  }
+  &__content{
+    padding-top: rem(13);
+    @include adaptiv-value('padding-left', 20, 10, 1);
+    @include adaptiv-value('padding-right', 20, 10, 1);
+    @include adaptiv-value('padding-bottom', 25, 15, 1);
+  }
+  &__label {
+    padding: rem(6) rem(15);
+    color: var(--white);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: rem(10);
+    //background-color: var(--yellow);
+    border-radius: rem(6);
+
+  }
+
+  &__price {
+    font-weight: 700;
+    @include adaptiv-value('font-size', 20, 18, 1);
+    margin-bottom: em(10, 20);
+    flex: 1 1 auto;
+  }
+
+  &__parameters {
+    color: var(--grey);
+
+  }
+}
+
+
 .services {
 
-  &__container {
-  }
+  &__container {}
 
-  &__title {
-  }
+  &__title {}
 
   &__filter__wrap {
     display: inline-flex;
@@ -274,11 +391,9 @@ watchEffect(async () => {
 
 .advantages {
 
-  &__container {
-  }
+  &__container {}
 
-  &__title {
-  }
+  &__title {}
 
   &__items {
     display: flex;
@@ -328,11 +443,9 @@ watchEffect(async () => {
 
 .team {
 
-  &__container {
-  }
+  &__container {}
 
-  &__title {
-  }
+  &__title {}
 
   &__items {
     display: flex;
@@ -373,8 +486,7 @@ watchEffect(async () => {
     }
   }
 
-  &__text {
-  }
+  &__text {}
 }
 
 
@@ -428,7 +540,6 @@ watchEffect(async () => {
     @include adaptiv-value('font-size', 22, 18, 1);
   }
 
-  &__button {
-  }
+  &__button {}
 }
 </style>

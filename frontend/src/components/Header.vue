@@ -17,7 +17,7 @@ import {RouterLink} from "vue-router";
               <RouterLink :to="{name: 'news'}" class='menu__link'>Объекты</RouterLink>
             </li>
             <li>
-              <RouterLink to="" class='menu__link'>Услуги</RouterLink>
+              <RouterLink to="#services" class='menu__link'>Услуги</RouterLink>
             </li>
             <li>
               <RouterLink :to="{name: 'news'}" class='menu__link'>Новости</RouterLink>
