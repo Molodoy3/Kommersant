@@ -12,9 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // отключаем csrf токен для апи запросов
-        /*$middleware->validateCsrfTokens(except: [
+        $middleware->validateCsrfTokens(except: [
             'api/*'
-        ]);*/
+        ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions) {
