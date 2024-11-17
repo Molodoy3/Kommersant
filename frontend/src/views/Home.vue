@@ -67,12 +67,12 @@ watchEffect(async () => {
 <template>
   <section class="welcome">
     <picture>
-      <source data-srcset='/img/welcome/bg.webp' type='image/webp'>
+      <source srcset='/img/welcome/bg.webp' type='image/webp'>
       <img v-lazy='"/img/welcome/bg.jpeg"' alt='фон'>
     </picture>
     <div class='welcome__container'>
       <h1 class="welcome__title title">Агенство недвижимости
-        «Коммернант»</h1>
+        «Коммерсант»</h1>
       <div class="welcome__text">надежное агентство недвижимости, предлагающее услуги по покупке, продаже и аренде в
         Пермском крае
       </div>
@@ -86,8 +86,8 @@ watchEffect(async () => {
         <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties" class="properties__item">
           <div class="properties__image">
             <picture>
-              <source :data-srcset='property.image + ".webp"' type='image/webp'>
-              <img v-lazy='property.image + "." + property.image_extension' alt='объект недвижимости'>
+              <source :srcset='property.image + "." + property.image_extension' :type='"image/" + property.image_extension'>
+              <img v-lazy='property.image + ".webp"' alt='объект недвижимости'>
             </picture>
             <div class="properties__labels">
               <div
@@ -97,8 +97,10 @@ watchEffect(async () => {
           </div>
           <div class="properties__content">
             <h4 class="properties__title-item">{{ property.name }}</h4>
-            <div class="properties__price">{{ property.prise }}р.</div>
+            <div class="properties__price">{{ property.prise }}</div>
             <ul class="properties__parameters">
+              <li class="rent" v-if="property.transaction_type_id === 1">— {{ property.transaction_type.name }}</li>
+              <li>— {{ property.type.name }}</li>
               <li>— {{ property.address }}</li>
               <li>— {{ property.square }}м²</li>
             </ul>
@@ -153,6 +155,7 @@ watchEffect(async () => {
       </div>
       <div class="services__tabs">
         <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
+             :data-service-id-popup="service.id"
           v-for="service in services" :data-filter-item="service.category_id" class="services__item">
           <h5 class="services__title-item">{{ service.title }}</h5>
           <div class="services__description">{{ service.description }}</div>
@@ -169,8 +172,8 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source data-srcset="/img/team/artem.webp" type='image/webp'>
-              <img v-lazy="'/img/team/artem.jpg'" alt='Артём'>
+              <source srcset="/img/team/artem.jpg" type='image/jpg'>
+              <img v-lazy="'/img/team/artem.webp'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item">Главный IT специалист</h5>
@@ -179,8 +182,8 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source data-srcset="/img/team/djavad.webp" type='image/webp'>
-              <img v-lazy="'/img/team/djavad.jpg'" alt='Джавад'>
+              <source srcset="/img/team/djavad.jpg" type='image/jpg'>
+              <img v-lazy="'/img/team/djavad.webp'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item">Директор</h5>
@@ -190,8 +193,8 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
-              <source data-srcset="/img/team/vasa.webp" type='image/webp'>
-              <img v-lazy="'/img/team/vasa.jpg'" alt='Вася'>
+              <source srcset="/img/team/vasa.jpg" type='image/jpg'>
+              <img v-lazy="'/img/team/vasa.webp'" alt='Артём'>
             </picture>
           </div>
           <h5 class="team__title-item"> Маркетолог</h5>
@@ -290,7 +293,6 @@ watchEffect(async () => {
 
   &__parameters {
     color: var(--grey);
-
   }
 }
 

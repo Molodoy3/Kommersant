@@ -78,10 +78,20 @@ export function delegationClick() {
           header.style.paddingRight = 0;
         }
 
-        //дополнительно для поля услуги
+        //убираем поле с текстом услуги
         const inputServiceText = popup.querySelector('#serviceText');
         inputServiceText.value = '';
-        inputServiceText.classList.add('input_none');
+        inputServiceText.closest('div').classList.add('form__item_none');
+
+        //убираем поле с ценой для торга
+        const inputBargainingText = popup.querySelector('#bargainingText');
+        inputBargainingText.value = '';
+        inputBargainingText.closest('div').classList.add('form__item_none');
+
+        //id услуги убираем в input
+        popup.querySelector('#serviceId').value = null
+        //id объекта убираем в input
+        popup.querySelector('#propertyId').value = null
       }
     }
     if (targetElement.closest("[data-button-for-open-custom-popup]")) {
@@ -105,7 +115,27 @@ export function delegationClick() {
 
           const inputServiceText = popup.querySelector('#serviceText');
           inputServiceText.value = textService;
-          inputServiceText.classList.remove('input_none');
+          inputServiceText.closest('div').classList.remove('form__item_none');
+
+          //id услуги добавляем в input скрытый в попапе
+          const idService = dataServicePopup.dataset.serviceIdPopup;
+          if (idService)
+            popup.querySelector('#serviceId').value = idService
+
+          //либо если у нас объект, добавляем его id
+          const idProperty = dataServicePopup.dataset.propertyIdPopup;
+          if (idProperty)
+            popup.querySelector('#propertyId').value = idProperty
+        }
+
+        //если торг есть, то открываем поле для торга в попапе
+        const dataBargainingPopup = targetElement.closest("[data-is-bargaining-popup]");
+        if (dataBargainingPopup) {
+          const isBargaining = dataServicePopup.dataset.isBargainingPopup;
+          if (isBargaining) {
+            const inputBargainingText = popup.querySelector('#bargainingText');
+            inputBargainingText.closest('div').classList.remove('form__item_none');
+          }
         }
 
         e.preventDefault();
@@ -123,10 +153,20 @@ export function delegationClick() {
           header.style.paddingRight = 0;
         }
 
-        //дополнительно для поля услуги
+      //убираем поле с текстом услуги
         const inputServiceText = popup.querySelector('#serviceText');
         inputServiceText.value = '';
-        inputServiceText.classList.add('input_none');
+        inputServiceText.closest('div').classList.add('form__item_none');
+
+        //убираем поле с ценой для торга
+        const inputBargainingText = popup.querySelector('#bargainingText');
+        inputBargainingText.value = '';
+        inputBargainingText.closest('div').classList.add('form__item_none');
+
+        //id услуги убираем в input
+        popup.querySelector('#serviceId').value = null
+        //id объекта убираем в input
+        popup.querySelector('#propertyId').value = null
       }
     }
 

@@ -15,49 +15,84 @@ useMeta({
 
 const errors = ref<any>({});
 
-const name = ref('');
-const tel = ref('');
-const message = ref('');
-const service = ref('');
+//для телефонной маски
+onMounted(() => {
+  const inputs = document.querySelectorAll<HTMLInputElement>("[data-mask-tel]");
+  if (inputs.length) {
+    inputs.forEach(input => {
+      input.value = "+7 ";
+
+      input.addEventListener("input", mask, false);
+      input.addEventListener("focus", mask, false);
+      input.addEventListener("blur", mask, false);
+      input.addEventListener("keydown", handleKeydown, false);
+    });
+  }
+
+  function mask(this: HTMLInputElement, event: Event): void {
+    const pos = this.selectionStart || 0;
+    if (pos < 4) event.preventDefault();
+
+    const matrix = "+7 (___) ___-__-__";
+    let i = 0;
+    const val = this.value.replace(/\D/g, "");
+
+    let new_value = matrix.replace(/[_\d]/g, (a) => {
+      return i < val.length ? val.charAt(i++) : a;
+    });
+
+    i = new_value.indexOf("_");
+    if (i !== -1) {
+      i < 5 && (i = 4);
+      new_value = new_value.slice(0, i);
+    }
+
+    // Объявляем reg и присваиваем значение в одном выражении
+    let reg: RegExp = new RegExp(matrix.substr(0, this.value.length).replace(/_+/g, (a) => {
+      return "\\d{1," + a.length + "}";
+    }).replace(/[+()]/g, "\\$&"));
+
+    if (!reg.test(this.value) || this.value.length < 6) {
+      this.value = new_value;
+    }
+
+    if (event.type === "blur" && this.value.length < 6) {
+      this.value = "+7 ";
+    }
+  }
+
+  function handleKeydown(this: HTMLInputElement, event: KeyboardEvent): void {
+    if (event.key.length === 1 && !/\d/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+});
+
 
 async function submitApplication() {
-  const formData = new FormData();
-
-  //ПОМЕНЯТЬ РЕАКТИВНЫЕ НА ФОРМДАТУ, ЗАДАТЬ ВСЕМ ИНПУТАМ name
   const form = document.forms.namedItem('application') as HTMLFormElement | null;
   if (form) {
-    const formData2 = new FormData(form);
-    const formDataArray = Array.from(formData2.entries()).map(([key, value]) => {
+    const formData = new FormData(form);
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
+      await axios.post('/application/store', formData)
+        .then(res => {
+          //console.log(res.data)
+          errors.value = {};
+        })
+        .catch(error => {
+          if (error.response.status === 422) {
+            errors.value = error.response.data.errors;
+            console.log(errors.value)
+          }
+        });
+      //console.log('Успех:', response.data);
+
+    /*const formDataArray = Array.from(formData.entries()).map(([key, value]) => {
       return { key, value }; // Создаем объект с ключом и значением
     });
     // Выводим массив
-    console.log(formDataArray);
+    console.log(formDataArray);*/
   }
-
-
-
-  formData.append('name', name.value);
-  formData.append('telephone', tel.value);
-  formData.append('comment', message.value);
-  service.value ? formData.append('service', message.value) : null;
-
-  //console.log(csrfToken)
-  //formData.append('_token', csrfToken);
-  try {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
-
-    const response = await axios.post('/application/store', formData)
-      .catch(error => {
-        if (error.response.status === 422) {
-          errors.value = error.response.data.errors;
-          console.log(errors.value)
-        }
-      });
-    //console.log('Успех:', response.data);
-  } catch (error) {
-    console.error('Ошибка:', error);
-  }
-
 }
 
 </script>
@@ -80,29 +115,36 @@ async function submitApplication() {
           </div>
           <h2 class="window-application__title title">Отправьте заявку и мы свяжемся с вами в ближайшее время</h2>
           <form name="application" @submit.prevent="submitApplication" class="window-application__form form">
-            <div class="form__item">
-              <input v-model="service" id="serviceText" type="text" class="input input_readonly input_none"
+            <div class="form__item form__item_none">
+              <input name="service" id="serviceText" type="text" class="input input_readonly"
                 readonly />
+              <input name="service_id" id="serviceId" type="hidden" readonly/>
+              <input name="property_id" id="propertyId" type="hidden" readonly/>
+            </div>
+            <div class="form__item form__item_none">
+              <label for="name" class="label">Преложите свою цену в рублях (необязательно)</label>
+              <input name="user_price" id="bargainingText" type="text" class="input"/>
+              <div v-if="errors.user_price" class="form__error">{{ errors.user_price[0] }}</div>
             </div>
             <div class="form__item">
               <label for="name" class="label">Как вас зовут?<span class="necessarily">*</span></label>
               <input name="name"
-                :class="errors.name ? 'error' : null"
-                v-model="name" id="name" type="text" placeholder="Имя" class="input" />
+                :class="errors.name ? 'error' : null" id="name" type="text" placeholder="Имя" class="input" />
               <div v-if="errors.name" class="form__error">{{ errors.name[0] }}</div>
             </div>
             <div class="form__item">
               <label for="tel" class="label">Ваш номер телефона для связи<span class="necessarily">*</span></label>
               <input
+                data-mask-tel
                 :class="errors.telephone ? 'error' : null"
-                v-model="tel" id="tel" type="tel" placeholder="+7" class="input" />
+                name="telephone" id="tel" type="tel" placeholder="+7" class="input" />
               <div v-if="errors.telephone" class="form__error">{{ errors.telephone[0] }}</div>
             </div>
             <div class="form__item">
-              <label for="message" class="label">Комментарий</label>
+              <label for="message" class="label">Комментарий<span class="necessarily">*</span></label>
               <textarea
                 :class="errors.comment ? 'error' : null"
-                v-model="message" id="message" class="textarea"></textarea>
+                name="comment" id="message" class="textarea"></textarea>
               <div v-if="errors.comment" class="form__error">{{ errors.comment[0] }}</div>
             </div>
             <button class="button-border" type="submit">Отправить</button>
@@ -172,7 +214,7 @@ async function submitApplication() {
     @include adaptiv-value('border-radius', 18, 12, 1);
     box-shadow: 0px 4px 108px 0px rgba(53, 77, 175, 0.6);
 
-    max-width: rem(740);
+    max-width: rem(710);
     background-color: var(--white);
     transition: transform 0.6s ease 0s;
     transform: scale(0.45);

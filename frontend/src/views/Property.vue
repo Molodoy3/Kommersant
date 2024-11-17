@@ -115,8 +115,8 @@ watchEffect(async () => {
             <div class="slider__wrapper">
               <div v-for="image in property.images" class="slider__slide slider__image">
                 <picture>
-                  <source :data-srcset='image.path + ".webp"' type='image/webp'>
-                  <img v-lazy='image.path + "." + image.extension' alt='картинка объекта недвижимости'>
+                  <source :srcset='image.path + "." + image.extension' :type='"image/" + image.extension'>
+                  <img v-lazy='image.path + ".webp"' alt='объект недвижимости'>
                 </picture>
               </div>
             </div>
@@ -130,8 +130,8 @@ watchEffect(async () => {
             <div class="slider-thumbs__wrapper">
               <div v-for="image in property.images" class="slider-thumbs__slide slider-thumbs__image">
                 <picture>
-                  <source :data-srcset='image.path + ".webp"' type='image/webp'>
-                  <img v-lazy='image.path + "." + image.extension' alt='картинка объекта недвижимости'>
+                  <source :srcset='image.path + "." + image.extension' :type='"image/" + image.extension'>
+                  <img v-lazy='image.path + ".webp"' alt='объект недвижимости'>
                 </picture>
               </div>
             </div>
@@ -144,11 +144,15 @@ watchEffect(async () => {
           </div>
           <h1 class="property__title title">{{ property.name }}</h1>
           <ul class="properties__parameters">
+            <li class="rent" v-if="property.transaction_type_id === 1">— {{ property.transaction_type.name }}</li>
+            <li>— {{ property.type.name }}</li>
             <li>— {{ property.address }}</li>
             <li>— {{ property.square }}м²</li>
           </ul>
           <a :href="property.link" class="property__link">Ссылка на объявление</a>
+          <div class="property__price">{{ property.prise }}</div>
           <button data-button-for-open-custom-popup="application" :data-service-popup="property.name"
+                  :data-property-id-popup="property.id"
                   :data-is-bargaining-popup="property.labels.some((label: Label) => label.id == 1)" type="button"
             class="property__button button">Отправить заявку
           </button>
@@ -160,7 +164,6 @@ watchEffect(async () => {
       </div>
       <div class="property__geo">
         <h2 class="property__sub-title">Расположение на карте</h2>
-
       </div>
     </div>
     <Preloader v-else />
@@ -278,6 +281,7 @@ watchEffect(async () => {
   }
 
   &__slide {
+    cursor: pointer;
     flex-shrink: 0;
     position: relative;
     @include adaptiv-value('height', 75, 60, 1);
@@ -298,7 +302,11 @@ watchEffect(async () => {
 .property {
   @include adaptiv-value('padding-top', 50, 20, 1);
   margin-bottom: 0;
-
+  &__price{
+    @include adaptiv-value('font-size', 28, 20, 1);
+    font-weight: 700;
+    margin-bottom: .5em;
+  }
   &__container {}
 
   &__body {
@@ -347,6 +355,15 @@ watchEffect(async () => {
   .properties__parameters {
     @include adaptiv-value('margin-bottom', 20, 12, 1);
     color: var(--grey);
+    margin-left: auto;
+    max-width: rem(300);
+    li {
+
+      &:not(:last-child) {
+        margin-bottom: rem(7);
+      }
+
+    }
   }
 
   &__link {
@@ -354,7 +371,7 @@ watchEffect(async () => {
     transition: color 0.3s ease;
     font-weight: 500;
     font-size: rem(14);
-    display: block;
+    display: inline-block;
     @include adaptiv-value('margin-bottom', 20, 12, 1);
 
     &:focus {

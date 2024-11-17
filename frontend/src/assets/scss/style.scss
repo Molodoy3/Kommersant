@@ -23,7 +23,9 @@ body {
         overflow: hidden;
     }
 }
-
+.rent{
+    color: var(--yellow);
+}
 [class*="__image"]:has(img[lazy=loading]) {
     &::after{
         content:'';
@@ -112,6 +114,9 @@ section{
 .form {
     &__item {
         @include adaptiv-value("margin-bottom", 18, 12, 1);
+        &_none {
+            display: none;
+        }
     }
     &__error{
         font-size: rem(11);
@@ -131,9 +136,7 @@ section{
         color: var(--blue);
         background: var(--main);
     }
-    &_none {
-        display: none;
-    }
+
 
 }
 

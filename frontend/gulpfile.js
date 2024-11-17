@@ -4,7 +4,7 @@ import imagemin from 'gulp-imagemin';
 
 // Задача для конвертации изображений в формат WebP
 gulp.task("images", function () {
-  return gulp.src("public/img/**/*.{jpg,jpeg,png,gif}", { encoding: false }) // Укажите путь к вашим изображениям
+  return gulp.src("public/img/**/*.{jpg,jpeg,png,gif}", { encoding: false }) // ВОТ ЭТО Я ДОБАВЛЯЛ ЧТОБЫ ЗАРАБОТАЛО (картинки передавались в текстовом формате без этого)
     .pipe(imagemin({ // Оптимизация изображений
       progressive: true,
       svgo: {

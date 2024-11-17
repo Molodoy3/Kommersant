@@ -12,8 +12,8 @@ import Vk from "@/components/icons/Vk.vue";
       <div class="footer__body">
         <RouterLink :to="{ name: 'home' }" class="footer__logo">
           <picture>
-              <source data-srcset='/img/logo.webp' type='image/webp'>
-              <img v-lazy='"/img/logo.jpg"' alt='Логотип'>
+            <source srcset='/img/logo.jpg' type='image/jpg'>
+            <img v-lazy='"/img/logo.webp"' alt='Логотип'>
           </picture>
         </RouterLink>
         <div class="footer__links">
