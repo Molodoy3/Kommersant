@@ -44,7 +44,7 @@ class TelegramNotificationNewApplication extends Notification
         //dd($file);
         return TelegramFile::create()
             ->content("Вацочек лошочек😁😊😜")
-            ->file($filePath, 'jpeg');
+            ->file('https://3721731-fg31474.twc1.net:8080/storage/properties/1/image.jpeg', 'jpeg');
     }
 
     /**
