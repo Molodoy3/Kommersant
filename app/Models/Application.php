@@ -11,6 +11,7 @@ class Application extends Model
         'telephone',
         'comment',
         'service_id',
+        'property_id',
         'user_price'
     ];
 }

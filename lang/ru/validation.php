@@ -160,6 +160,7 @@ return [
         'current_password' => 'текущий пароль',
         'email' => 'почта',
         'comment' => 'комментарий',
+        'user_price' => 'цена для торга',
         'telephone' => 'телефон',
     ],
 ];

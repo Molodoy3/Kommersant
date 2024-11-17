@@ -19,13 +19,17 @@ class Property extends Model
     {
         return $this->BelongsTo(TypeProperty::class, 'type_property_id');
     }
+    public function transactionType():BelongsTo
+    {
+        return $this->BelongsTo(TransactionType::class, 'transaction_type_id');
+    }
     public function labels():BelongsToMany
     {
         return $this->belongsToMany(Label::class, 'property_label');
     }
-
     public function getPriseAttribute($value)
     {
-        return number_format($value, 0, '.', ' ');
+        $editedPrice = number_format($value, 0, '.', ' ');
+        return $this->transaction_type_id == 1 ? $editedPrice . 'р/мес.' : $editedPrice . 'р.';
     }
 }

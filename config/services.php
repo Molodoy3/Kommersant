@@ -27,7 +27,9 @@ return [
     'resend' => [
         'key' => env('RESEND_KEY'),
     ],
-
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN', '7881792418:AAEkWCco9MPCNvGevk-EbsjM05rHUj3axtY')
+    ],
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

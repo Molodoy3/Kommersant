@@ -24,6 +24,7 @@ class PropertyFactory extends Factory
             'address' => $this->faker->address,
             'square' => $this->faker->randomFloat(2, 0, 500),
             'type_property_id' => rand(1, 2),
+            'transaction_type_id' => rand(1, 2),
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'link' => $this->faker->url,

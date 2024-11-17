@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TypeProperty>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TransactionType>
  */
-class TypePropertyFactory extends Factory
+class TransactionTypeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,14 +17,14 @@ class TypePropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            //'name'
+
         ];
     }
     public function customLabels()
     {
         return $this->state(function (array $attributes) {
             return [
-                'name' => 'Квартира',
+                'name' => 'Аренда',
             ];
         });
     }
@@ -33,7 +33,7 @@ class TypePropertyFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'name' => 'Дом',
+                'name' => 'Продажа',
             ];
         });
     }
