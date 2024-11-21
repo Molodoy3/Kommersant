@@ -115,6 +115,7 @@ watchEffect(async () => {
             <div class="slider__wrapper">
               <div v-for="image in property.images" class="slider__slide slider__image">
                 <picture>
+                  <source :srcset='image.path + ".webp"' :type='"image/webp"'>
                   <source :srcset='image.path + "." + image.extension' :type='"image/" + image.extension'>
                   <img v-lazy='image.path + ".webp"' alt='объект недвижимости'>
                 </picture>
@@ -130,6 +131,7 @@ watchEffect(async () => {
             <div class="slider-thumbs__wrapper">
               <div v-for="image in property.images" class="slider-thumbs__slide slider-thumbs__image">
                 <picture>
+                  <source :srcset='image.path + ".webp"' :type='"image/webp"'>
                   <source :srcset='image.path + "." + image.extension' :type='"image/" + image.extension'>
                   <img v-lazy='image.path + ".webp"' alt='объект недвижимости'>
                 </picture>

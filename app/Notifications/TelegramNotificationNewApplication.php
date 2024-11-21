@@ -36,15 +36,28 @@ class TelegramNotificationNewApplication extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toTelegram(object $notifiable): TelegramFile
+    public function toTelegram(object $notifiable): TelegramMessage
     {
         $filePath = Storage::disk('public')->path('properties/1/image.jpeg');
-        //dd($filePath);
-        //$file = new UploadedFile($filePath, 'image.jpeg', null, null, true);
-        //dd($file);
-        return TelegramFile::create()
-            ->content("Вацочек лошочек😁😊😜")
-            ->file('https://3721731-fg31474.twc1.net:8080/storage/properties/1/image.jpeg', 'jpeg');
+        //dd($this->applicationData);
+        $message = TelegramMessage::create()
+            ->line("Пришла новая заявка!")
+            ->line("");
+
+        if ($this->applicationData->service) {
+            $message->line("Услуга: " . $this->applicationData->service);
+        }
+
+        $message->line("Имя: " . $this->applicationData->name)
+            ->line("Телефон: " . $this->applicationData->telephone)
+            ->line("Сообщение: " . $this->applicationData->comment);
+
+        if ($this->applicationData->user_price) {
+            $message->line("Пользовательская цена для торга: " . $this->applicationData->user_price);
+        }
+
+// Возвращаем сообщение
+        return $message;
     }
 
     /**

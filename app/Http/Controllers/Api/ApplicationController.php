@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Data\ApplicationData;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessApplication;
 use App\Models\Application;
+use App\Models\Property;
+use App\Models\Service;
 use App\Notifications\TelegramNotificationNewApplication;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,16 +22,7 @@ class ApplicationController extends Controller
     {
         try {
             $validatedData = ApplicationData::validate($request->all());
-            Application::create($validatedData);
-
-            $chatIds = [
-                992083441,
-                6251517297,
-            ];
-            // Отправляем уведомление каждому идентификатору чата
-            foreach ($chatIds as $chatId) {
-                Notification::route('telegram', $chatId)->notify(new TelegramNotificationNewApplication($validatedData));
-            }
+            ProcessApplication::dispatch($validatedData);
 
             return response()->json(['status' => 'success'], 201);
         } catch (ValidationException $e) {

@@ -87,8 +87,8 @@ const handleScroll = () => {
       <div v-if="news && news.data" class="news__items">
         <article v-for="item in news.data" class="news__item">
           <div class="news__image">
-
             <picture>
+              <source :srcset='item.image + ".webp"' :type='"image/webp"'>
               <source :srcset='item.image + "." + item.image_extension' :type='"image/" + item.image_extension'>
               <img v-lazy='item.image + ".webp"' alt='объект недвижимости'>
             </picture>

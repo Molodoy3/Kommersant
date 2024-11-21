@@ -65,10 +65,11 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <section class="welcome">
+  <section class="welcome welcome__image">
     <picture>
-      <source srcset='/img/welcome/bg.webp' type='image/webp'>
-      <img v-lazy='"/img/welcome/bg.jpeg"' alt='фон'>
+      <source srcset="/img/welcome/bg.webp" type="image/webp">
+      <source srcset="/img/welcome/bg.jpeg" type="image/jpeg">
+      <img v-lazy="'/img/welcome/bg.webp'" alt="фон">
     </picture>
     <div class='welcome__container'>
       <h1 class="welcome__title title">Агенство недвижимости
@@ -86,6 +87,7 @@ watchEffect(async () => {
         <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties" class="properties__item">
           <div class="properties__image">
             <picture>
+              <source :srcset='property.image + ".webp"' :type='"image/webp"'>
               <source :srcset='property.image + "." + property.image_extension' :type='"image/" + property.image_extension'>
               <img v-lazy='property.image + ".webp"' alt='объект недвижимости'>
             </picture>
@@ -172,6 +174,7 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
+              <source srcset="/img/team/artem.webp" type='image/webp'>
               <source srcset="/img/team/artem.jpg" type='image/jpg'>
               <img v-lazy="'/img/team/artem.webp'" alt='Артём'>
             </picture>
@@ -182,6 +185,7 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
+              <source srcset="/img/team/djavad.webp" type='image/webp'>
               <source srcset="/img/team/djavad.jpg" type='image/jpg'>
               <img v-lazy="'/img/team/djavad.webp'" alt='Артём'>
             </picture>
@@ -193,6 +197,7 @@ watchEffect(async () => {
         <div class="team__item">
           <div class="team__image">
             <picture>
+              <source srcset="/img/team/vasa.webp" type='image/webp'>
               <source srcset="/img/team/vasa.jpg" type='image/jpg'>
               <img v-lazy="'/img/team/vasa.webp'" alt='Артём'>
             </picture>

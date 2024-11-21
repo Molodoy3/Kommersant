@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import {RouterLink, RouterView} from "vue-router";
-import {onMounted, ref} from "vue";
-import {useMeta} from "vue-meta";
+import { RouterLink, RouterView } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useMeta } from "vue-meta";
 import axios from "axios";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import Tick from "@/components/icons/Tick.vue";
 
 useMeta({
   title: 'Коммерсант',
@@ -69,23 +70,34 @@ onMounted(() => {
 });
 
 
+const isLoading = ref<Boolean>(false);
 async function submitApplication() {
   const form = document.forms.namedItem('application') as HTMLFormElement | null;
   if (form) {
     const formData = new FormData(form);
-      axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
-      await axios.post('/application/store', formData)
-        .then(res => {
-          //console.log(res.data)
-          errors.value = {};
-        })
-        .catch(error => {
-          if (error.response.status === 422) {
-            errors.value = error.response.data.errors;
-            console.log(errors.value)
-          }
-        });
-      //console.log('Успех:', response.data);
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
+
+    let loadingTimeout = setTimeout(() => {
+      isLoading.value = true;
+    }, 100);
+
+    await axios.post('/application/store', formData)
+      .then(() => {
+        errors.value = {};
+        form.reset();
+
+        const sentElement = document.querySelector<HTMLElement>('.window-application__sent')
+        sentElement ? sentElement.classList.add('window-application__sent_active') : null;
+      })
+      .catch(error => {
+        if (error.response.status === 422) {
+          errors.value = error.response.data.errors;
+        }
+      }).finally(() => {
+        clearTimeout(loadingTimeout);
+        isLoading.value = false;
+      });
+    //console.log('Успех:', response.data);
 
     /*const formDataArray = Array.from(formData.entries()).map(([key, value]) => {
       return { key, value }; // Создаем объект с ключом и значением
@@ -98,12 +110,18 @@ async function submitApplication() {
 </script>
 
 <template>
-  <Header/>
+  <Header />
   <main class="page">
     <RouterView />
     <section class="window-application" data-custom-popup="application">
       <div class="window-application__body">
-        <div class="window-application__content" data-custom-popup-content>
+        <div class="window-application__content" :class="{ 'window-application__content_load': isLoading }" data-custom-popup-content>
+          <div class="window-application__sent">
+            <div class="window-application__tick">
+              <Tick/>
+            </div>
+            Ваше сообщение отправлено!
+          </div>
           <div class="window-application__top">
             <div class="window-application__connect">
               <a href="tel:79224847440" class="window-application__tel">+7 (922) 484-74-40</a>
@@ -116,35 +134,31 @@ async function submitApplication() {
           <h2 class="window-application__title title">Отправьте заявку и мы свяжемся с вами в ближайшее время</h2>
           <form name="application" @submit.prevent="submitApplication" class="window-application__form form">
             <div class="form__item form__item_none">
-              <input name="service" id="serviceText" type="text" class="input input_readonly"
-                readonly />
-              <input name="service_id" id="serviceId" type="hidden" readonly/>
-              <input name="property_id" id="propertyId" type="hidden" readonly/>
+              <input name="service" id="serviceText" type="text" class="input input_readonly" readonly />
+              <input name="service_id" id="serviceId" type="hidden" readonly />
+              <input name="property_id" id="propertyId" type="hidden" readonly />
             </div>
             <div class="form__item form__item_none">
               <label for="name" class="label">Преложите свою цену в рублях (необязательно)</label>
-              <input name="user_price" id="bargainingText" type="text" class="input"/>
+              <input name="user_price" id="bargainingText" type="text" class="input" />
               <div v-if="errors.user_price" class="form__error">{{ errors.user_price[0] }}</div>
             </div>
             <div class="form__item">
               <label for="name" class="label">Как вас зовут?<span class="necessarily">*</span></label>
-              <input name="name"
-                :class="errors.name ? 'error' : null" id="name" type="text" placeholder="Имя" class="input" />
+              <input name="name" :class="errors.name ? 'error' : null" id="name" type="text" placeholder="Имя"
+                class="input" />
               <div v-if="errors.name" class="form__error">{{ errors.name[0] }}</div>
             </div>
             <div class="form__item">
               <label for="tel" class="label">Ваш номер телефона для связи<span class="necessarily">*</span></label>
-              <input
-                data-mask-tel
-                :class="errors.telephone ? 'error' : null"
-                name="telephone" id="tel" type="tel" placeholder="+7" class="input" />
+              <input data-mask-tel :class="errors.telephone ? 'error' : null" name="telephone" id="tel" type="tel"
+                placeholder="+7" class="input" />
               <div v-if="errors.telephone" class="form__error">{{ errors.telephone[0] }}</div>
             </div>
             <div class="form__item">
               <label for="message" class="label">Комментарий<span class="necessarily">*</span></label>
-              <textarea
-                :class="errors.comment ? 'error' : null"
-                name="comment" id="message" class="textarea"></textarea>
+              <textarea :class="errors.comment ? 'error' : null" name="comment" id="message"
+                class="textarea"></textarea>
               <div v-if="errors.comment" class="form__error">{{ errors.comment[0] }}</div>
             </div>
             <button class="button-border" type="submit">Отправить</button>
@@ -156,7 +170,7 @@ async function submitApplication() {
       </div>
     </section>
   </main>
-  <Footer/>
+  <Footer />
 </template>
 
 <style scoped lang="scss">
@@ -164,6 +178,38 @@ async function submitApplication() {
 @import '../assets/scss/functions';
 
 .window-application {
+  &__sent{
+    display: none;
+    &_active{
+      display: flex;
+    }
+    font-weight: 700;
+    @include adaptiv-value('font-size', 40, 20, 1);
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  &__tick{
+    border-radius: 50%;
+    @include adaptiv-value('width', 100, 50, 1);
+    @include adaptiv-value('height', 100, 50, 1);
+    background-color: green;
+    display: flex;
+    justify-content: center;
+    @include adaptiv-value('margin-bottom', 25, 15, 1);
+    align-items: center;
+    margin: 0 auto;
+    overflow: hidden;
+    @include adaptiv-value('padding', 20, 10, 1);
+  }
   &.open {
     z-index: 700;
     overflow-y: auto;
@@ -209,7 +255,131 @@ async function submitApplication() {
     }
   }
 
+  @keyframes mulShdSpin {
+
+    0%,
+    100% {
+      box-shadow: 0em -2.6em 0em 0em var(--yellow),
+        1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2),
+        2.5em 0em 0 0em rgba(173, 173, 173, 0.2),
+        1.75em 1.75em 0 0em rgba(173, 173, 173, 0.2),
+        0em 2.5em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em 1.8em 0 0em rgba(173, 173, 173, 0.2),
+        -2.6em 0em 0 0em #e0dcca,
+        -1.8em -1.8em 0 0em #cebe81;
+    }
+
+    12.5% {
+      box-shadow: 0em -2.6em 0em 0em #cebe81,
+        1.8em -1.8em 0 0em var(--yellow),
+        2.5em 0em 0 0em rgba(173, 173, 173, 0.2),
+        1.75em 1.75em 0 0em rgba(173, 173, 173, 0.2),
+        0em 2.5em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em 1.8em 0 0em rgba(173, 173, 173, 0.2),
+        -2.6em 0em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em -1.8em 0 0em #e0dcca;
+    }
+
+    25% {
+      box-shadow: 0em -2.6em 0em 0em #e0dcca,
+        1.8em -1.8em 0 0em #cebe81,
+        2.5em 0em 0 0em var(--yellow),
+        1.75em 1.75em 0 0em rgba(173, 173, 173, 0.2),
+        0em 2.5em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em 1.8em 0 0em rgba(173, 173, 173, 0.2),
+        -2.6em 0em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2);
+    }
+
+    37.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(173, 173, 173, 0.2),
+        1.8em -1.8em 0 0em #e0dcca,
+        2.5em 0em 0 0em #cebe81,
+        1.75em 1.75em 0 0em var(--yellow),
+        0em 2.5em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em 1.8em 0 0em rgba(173, 173, 173, 0.2),
+        -2.6em 0em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2);
+    }
+
+    50% {
+      box-shadow: 0em -2.6em 0em 0em rgba(173, 173, 173, 0.2),
+        1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2),
+        2.5em 0em 0 0em #e0dcca,
+        1.75em 1.75em 0 0em #cebe81,
+        0em 2.5em 0 0em var(--yellow),
+        -1.8em 1.8em 0 0em rgba(173, 173, 173, 0.2),
+        -2.6em 0em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2);
+    }
+
+    62.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(173, 173, 173, 0.2),
+        1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2),
+        2.5em 0em 0 0em rgba(173, 173, 173, 0.2),
+        1.75em 1.75em 0 0em #e0dcca,
+        0em 2.5em 0 0em #cebe81,
+        -1.8em 1.8em 0 0em var(--yellow),
+        -2.6em 0em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2);
+    }
+
+    75% {
+      box-shadow: 0em -2.6em 0em 0em rgba(173, 173, 173, 0.2),
+        1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2),
+        2.5em 0em 0 0em rgba(173, 173, 173, 0.2),
+        1.75em 1.75em 0 0em rgba(173, 173, 173, 0.2),
+        0em 2.5em 0 0em #e0dcca,
+        -1.8em 1.8em 0 0em #cebe81,
+        -2.6em 0em 0 0em var(--yellow),
+        -1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2);
+    }
+
+    87.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(173, 173, 173, 0.2),
+        1.8em -1.8em 0 0em rgba(173, 173, 173, 0.2),
+        2.5em 0em 0 0em rgba(173, 173, 173, 0.2),
+        1.75em 1.75em 0 0em rgba(173, 173, 173, 0.2),
+        0em 2.5em 0 0em rgba(173, 173, 173, 0.2),
+        -1.8em 1.8em 0 0em #e0dcca,
+        -2.6em 0em 0 0em #cebe81,
+        -1.8em -1.8em 0 0em var(--yellow);
+    }
+  }
+
+
   &__content {
+    overflow: hidden;
+
+    &_load {
+      &::after {
+        background-color: rgba(255, 255, 255, 0.432);
+        content: '';
+        position: absolute;
+        backdrop-filter: blur(3px);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s ease 0.1s;
+      }
+
+      &::before {
+        content: '';
+        font-size: 10px;
+        width: 1em;
+        height: 1em;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 4;
+        border-radius: 50%;
+        text-indent: -9999em;
+        animation: mulShdSpin 1.1s infinite ease .1s;
+        transform: translateZ(0) translate(-50%, -50%);
+      }
+    }
 
     @include adaptiv-value('border-radius', 18, 12, 1);
     box-shadow: 0px 4px 108px 0px rgba(53, 77, 175, 0.6);
@@ -264,6 +434,8 @@ async function submitApplication() {
 
   &__close {
     align-self: flex-start;
+    position: relative;
+    z-index: 5;
   }
 
   .button-border {
@@ -281,15 +453,18 @@ async function submitApplication() {
     font-size: rem(12);
     color: var(--grey);
     text-align: right;
+
     a {
       transition: color 0.3s ease;
+
       &:focus {
-          color: var(--yellow);
+        color: var(--yellow);
       }
+
       @media (any-hover: hover) {
-          &:hover{
-              color: var(--yellow);
-          }
+        &:hover {
+          color: var(--yellow);
+        }
       }
     }
   }
@@ -312,11 +487,4 @@ async function submitApplication() {
     }
   }
 }
-
-
-
-
-
-
-
 </style>

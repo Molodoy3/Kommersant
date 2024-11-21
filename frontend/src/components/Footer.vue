@@ -10,8 +10,9 @@ import Vk from "@/components/icons/Vk.vue";
   <footer class="footer">
     <div class='footer__container'>
       <div class="footer__body">
-        <RouterLink :to="{ name: 'home' }" class="footer__logo">
+        <RouterLink :to="{ name: 'home' }" class="footer__logo footer__image">
           <picture>
+            <source srcset="/img/logo.webp" type="image/webp">
             <source srcset='/img/logo.jpg' type='image/jpg'>
             <img v-lazy='"/img/logo.webp"' alt='Логотип'>
           </picture>
@@ -71,7 +72,7 @@ import Vk from "@/components/icons/Vk.vue";
 
   &__logo {
     @include adaptiv-value('width', 120, 80, 1);
-
+    aspect-ratio: 1 / 1;
     @media (max-width: $md3) {
       margin: 0 auto;
       margin-bottom: rem(20);
