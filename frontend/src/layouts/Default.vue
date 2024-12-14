@@ -69,7 +69,6 @@ onMounted(() => {
   }
 });
 
-
 const isLoading = ref<Boolean>(false);
 async function submitApplication() {
   const form = document.forms.namedItem('application') as HTMLFormElement | null;
@@ -211,9 +210,9 @@ async function submitApplication() {
     @include adaptiv-value('padding', 20, 10, 1);
   }
   &.open {
-    z-index: 700;
-    overflow-y: auto;
 
+    overflow-y: auto;
+    visibility: visible;
     .window-application__body {
       opacity: 1;
     }
@@ -222,19 +221,20 @@ async function submitApplication() {
       transform: scale(1);
     }
   }
-
+  z-index: 700;
+  visibility: hidden;
   position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -10;
+  //z-index: -10;
   overflow: hidden;
 
   &__body {
     opacity: 0;
     -webkit-transition: opacity .6s ease;
-    transition: opacity .6s ease;
+    transition: all .6s ease;
     background: rgba(27, 27, 27, .6);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -386,8 +386,8 @@ async function submitApplication() {
 
     max-width: rem(710);
     background-color: var(--white);
-    transition: transform 0.6s ease 0s;
-    transform: scale(0.45);
+    transition: all 0.6s ease 0s;
+    transform: scale(0.6);
     padding-top: rem(15);
     @include adaptiv-value('padding-bottom', 20, 15, 1);
     @include adaptiv-value('padding-left', 30, 25, 1);

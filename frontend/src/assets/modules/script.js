@@ -64,7 +64,7 @@ export function delegationClick() {
       }
     }
 
-    //?Открывание мобального окна (по классу open)
+    //?Открывание модального окна (по классу open)
     //атрибуты: data-button-for-open-custom-popup="popup" - кнопка открывания; data-custom-popup="popup" - попап; data-close-for-custom-popup - кнопка закрывания (обязательно внутри попапа);  data-custom-popup-content - контентная оболочка (внутри попапа внутри body попапа).
     if (targetElement.closest("[data-close-for-custom-popup]")) {
       const popup = targetElement.closest("[data-custom-popup]");
@@ -130,7 +130,7 @@ export function delegationClick() {
 
         //если торг есть, то открываем поле для торга в попапе
         const dataBargainingPopup = targetElement.closest("[data-is-bargaining-popup]");
-        if (dataBargainingPopup) {
+        if (dataBargainingPopup && dataBargainingPopup === true) {
           const isBargaining = dataServicePopup.dataset.isBargainingPopup;
           if (isBargaining) {
             const inputBargainingText = popup.querySelector('#bargainingText');

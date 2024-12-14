@@ -39,7 +39,7 @@ onMounted(() => {
 })
 
 let currentPage = currentDefaultPage.value;
-const limitPages = 30;
+const limitPages = 10;
 let isLoading = ref(false);
 const handleScroll = () => {
   //проверяем докрутили ли до конца новостей

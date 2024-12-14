@@ -14,17 +14,17 @@ import {RouterLink} from "vue-router";
         <nav class='menu__body'>
           <ul class='menu__list'>
             <li>
-              <RouterLink :to="{name: 'news'}" class='menu__link'>Объекты</RouterLink>
+              <RouterLink :to="{name: 'properties'}" class='menu__link'>Объекты</RouterLink>
             </li>
             <li>
-              <RouterLink to="#services" class='menu__link'>Услуги</RouterLink>
+              <RouterLink to="/#services" class='menu__link'>Услуги</RouterLink>
             </li>
             <li>
               <RouterLink :to="{name: 'news'}" class='menu__link'>Новости</RouterLink>
             </li>
-            <li>
+<!--            <li>
               <RouterLink to="" class='menu__link'>Контакты</RouterLink>
-            </li>
+            </li>-->
             <li>
               <button data-button-for-open-custom-popup="application" class="header__connect-mobile button" type="button">Связаться</button>
             </li>

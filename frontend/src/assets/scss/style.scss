@@ -177,7 +177,7 @@ section{
     padding: rem(10) rem(38);
     color: var(--yellow);
     @include adaptiv-value("border-radius", 14, 10, 1);
-    transition: color 0.3s ease border-color 0.3s ease;
+    transition: color 0.3s ease, border-color 0.3s ease;
 
     &:focus {
         border: 1px solid var(--yellow-hover2);
@@ -191,3 +191,109 @@ section{
         }
     }
 }
+
+
+
+.login{
+    flex: 1 1 auto;
+    padding-bottom: rem(30);
+    padding-top: rem(30);
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__title{
+        max-width: rem(560);
+        margin: 0 auto;
+        @include adaptiv-value('margin-bottom', 30, 20, 1);
+    }
+    &__form{
+        margin: 0 auto;
+        max-width: rem(420);
+    }
+    .button{
+        width: 100%;
+    }
+}
+
+.admin-panel {
+    flex: 1 1 auto;
+    padding: rem(30) 0;
+    @media (max-width: $md3){
+        padding: rem(15) 0;
+    }
+    display: flex;
+    flex-direction: column;
+    &__container {
+        flex: 1 1 auto;
+        display: flex;
+        @include adaptiv-value('column-gap', 30, 10, 1);
+    }
+
+    &__menu {
+        //align-self: stretch;
+        @include adaptiv-value('border-radius', 15, 5, 1);
+        background-color: var(--blue);
+        height: calc(100vh - rem(60));
+        position: sticky;
+        top: rem(30);
+        @media (max-width: $md3){
+            top: rem(15);
+            height: calc(100vh - rem(30));
+        }
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        @include adaptiv-value('padding-right', 20, 10, 1);
+        @include adaptiv-value('padding-left', 20, 10, 1);
+        @include adaptiv-value('padding-top', 30, 15, 1);
+        @include adaptiv-value('padding-bottom', 30, 15, 1);
+        flex: 0 0 rem(260);
+    }
+
+    &__list {
+        flex: 1 1 auto;
+        margin-bottom: rem(20);
+        @include adaptiv-value('font-size', 20, 16, 1);
+        font-weight: 700;
+        a {
+            transition: color 0.3s ease;
+            &:focus {
+                color: var(--yellow);
+            }
+            @media (any-hover: hover) {
+                &:hover{
+                    color: var(--yellow);
+                }
+            }
+        }
+    }
+
+    &__button {
+        text-align: center;
+    }
+
+    &__content {
+        flex: 1 1 auto;
+    }
+
+    &__table {
+        border-collapse: collapse;
+        overflow: hidden;
+        background-color: var(--white);
+
+        width: 100%;
+        @include adaptiv-value('border-radius', 10, 5, 1);
+        tr {
+
+        }
+        td {
+            @include adaptiv-value('padding', 10, 6, 1);
+            border: rem(1) solid #CFCFCF;
+        }
+    }
+
+    &__header-table {
+    }
+}
+

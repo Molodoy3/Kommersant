@@ -3,11 +3,12 @@
 import { useRoute } from "vue-router";
 import { ref } from "vue";
 import axios from "axios";
+import {routes} from "@/api.config.js";
 
 const article = ref<any | null>(null)
 
 const idNew = useRoute().params.id;
-axios.get('/articles/' + idNew)
+axios.get(routes.articles + idNew)
   .then(res => {
     article.value = res.data
   })

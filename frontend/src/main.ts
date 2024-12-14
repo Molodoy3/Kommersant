@@ -13,6 +13,20 @@ import router from './router'
 //axios.defaults.baseURL = 'http://147.45.161.249:8080/api';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
+// Перехватчик запросов Axios для добавления токена в заголовок Authorization
+/*axios.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);*/
+
 //ОЧЕНЬ ВАЖНО ВКЛЮЧИТЬ ПЕРЕДАЧУ КУКИ ПРИ ЗАПРОСАХ, ТАК КАК ТАМ ХРАНЯТЬСЯ ДАННЫЕ СЕССИИ И ЕСЛИ НЕ ПЕРЕДАВАТЬ, ТО
 //СЕССИИ В LARAVEL БУДУТ СОЗДАВАТЬСЯ ПОССТОЯННО НОВЫЕ, ТАК КАК НЕ БУДУТ ПРОХОДИТЬ ПРОВЕРКУ
 //В LARAVEL ТАКЖЕ В config/cors для сессий устанавливаем true поле 'supports_credentials' => true,

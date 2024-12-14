@@ -80,6 +80,29 @@ watchEffect(async () => {
       <a href="#properties" class="welcome__button button">Смотреть объекты</a>
     </div>
   </section>
+  <section id="services" class="services">
+    <div v-if="categories && services" data-tabs class='services__container'>
+      <h2 class="services__title title">Наши услуги</h2>
+      <div class="services__filter">
+        <ul class="services__filter__wrap">
+          <li v-for="(category, index) in categories">
+            <button :data-filter="category.id" type="button" :class="{ active: index === 0 }">{{ category.name }}
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="services__tabs">
+        <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
+             :data-service-id-popup="service.id"
+             v-for="service in services" :data-filter-item="service.category_id" class="services__item">
+          <h5 class="services__title-item">{{ service.title }}</h5>
+          <div class="services__description">{{ service.description }}</div>
+          <div class="services__price">{{ service.price }}₽</div>
+        </div>
+      </div>
+    </div>
+    <Preloader v-else />
+  </section>
   <section id="properties" class="properties">
     <div v-if="properties" class='properties__container'>
       <h2 class="properties__title title">Объекты в продаже</h2>
@@ -143,29 +166,6 @@ watchEffect(async () => {
         </div>
       </div>
     </div>
-  </section>
-  <section id="services" class="services">
-    <div v-if="categories && services" data-tabs class='services__container'>
-      <h2 class="services__title title">Наши услуги</h2>
-      <div class="services__filter">
-        <ul class="services__filter__wrap">
-          <li v-for="(category, index) in categories">
-            <button :data-filter="category.id" type="button" :class="{ active: index === 0 }">{{ category.name }}
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div class="services__tabs">
-        <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
-             :data-service-id-popup="service.id"
-          v-for="service in services" :data-filter-item="service.category_id" class="services__item">
-          <h5 class="services__title-item">{{ service.title }}</h5>
-          <div class="services__description">{{ service.description }}</div>
-          <div class="services__price">{{ service.price }}₽</div>
-        </div>
-      </div>
-    </div>
-    <Preloader v-else />
   </section>
   <section class="team">
     <div class='team__container'>
