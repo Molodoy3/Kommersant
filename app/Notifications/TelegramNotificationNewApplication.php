@@ -38,7 +38,7 @@ class TelegramNotificationNewApplication extends Notification
      */
     public function toTelegram(object $notifiable): TelegramMessage
     {
-        $filePath = Storage::disk('public')->path('properties/1/image.jpeg');
+        //$filePath = Storage::disk('public')->path('properties/1/image.jpeg');
         //dd($this->applicationData);
         $message = TelegramMessage::create()
             ->line("Пришла новая заявка!")
@@ -53,7 +53,7 @@ class TelegramNotificationNewApplication extends Notification
             ->line("Сообщение: " . $this->applicationData->comment);
 
         if ($this->applicationData->user_price) {
-            $message->line("Пользовательская цена для торга: " . $this->applicationData->user_price);
+            $message->line("Пользовательская цена для торга: " . $this->applicationData->user_price . 'р.');
         }
 
 // Возвращаем сообщение

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ class Property extends Model
     /** @use HasFactory<\Database\Factories\PropertyFactory> */
     use HasFactory;
 
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = ['updated_at'];
 
     public function type():BelongsTo
     {
@@ -22,6 +23,10 @@ class Property extends Model
     public function transactionType():BelongsTo
     {
         return $this->BelongsTo(TransactionType::class, 'transaction_type_id');
+    }
+    public function getCreatedAtAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format('d.m.y') : null;
     }
     public function labels():BelongsToMany
     {

@@ -6,6 +6,7 @@ import {computed} from 'vue';
 import {useRoute} from 'vue-router';
 import Pagination from "@/components/Pagination.vue";
 import Preloader from "@/components/Preloader.vue";
+import {routes} from "@/api.config.js";
 
 //для первоначального вывода новостей берем из get параметра текущий номер страинцы
 const route = useRoute();
@@ -14,7 +15,7 @@ const currentDefaultPage = computed(() => {
 });
 
 const news = ref<any | null>(null)
-axios.get('/articles', {
+axios.get(routes.articles, {
   params: {
     page: currentDefaultPage.value
   }})

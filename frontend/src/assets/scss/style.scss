@@ -23,16 +23,16 @@ body {
         overflow: hidden;
     }
 }
-.rent{
+.rent {
     color: var(--yellow);
 }
-[class*="__image"]{
+[class*="__image"] {
     position: relative;
     overflow: hidden;
 }
-[class*="__image"]:has(img[lazy=loading]) {
-    &::after{
-        content:'';
+[class*="__image"]:has(img[lazy="loading"]) {
+    &::after {
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -41,8 +41,8 @@ body {
         //background-color: #fff;
         //z-index: 3;
     }
-    &::before{
-        content:'';
+    &::before {
+        content: "";
         background-color: #979797;
         width: rem(17);
         height: 100%;
@@ -52,19 +52,19 @@ body {
         transform: rotate(30deg);
         z-index: 1;
         filter: blur(rem(15));
-        animation: loadImageAnim .85s linear infinite;
+        animation: loadImageAnim 0.85s linear infinite;
         //animation: name duration timing-function delay iteration-count direction fill-mode;
     }
 }
 @keyframes loadImageAnim {
-    0%{
+    0% {
         left: rem(-30);
     }
-    100%{
+    100% {
         left: 110%;
     }
 }
-*{
+* {
     line-height: 140%;
 }
 #app {
@@ -80,14 +80,13 @@ a {
 }
 
 button {
-
     background-color: transparent;
 }
 /*=============================================================================================================*/
 
 /*Общие блоки /=============================================================================*/
-section{
-    @include adaptiv-value('margin-bottom', 80, 40, 1);
+section {
+    @include adaptiv-value("margin-bottom", 80, 40, 1);
 }
 .title {
     @include adaptiv-value("font-size", 40, 28, 1);
@@ -96,11 +95,15 @@ section{
     @include adaptiv-value("margin-bottom", 40, 20, 1);
     line-height: 135%;
 }
+button{
+    font-size: inherit;
+}
 .button {
     padding: rem(9) rem(38);
     @include adaptiv-value("border-radius", 14, 10, 1);
     font-weight: 500;
     display: inline-block;
+    text-align: center;
     background-color: var(--yellow);
     color: var(--white);
     transition: background-color 0.3s ease;
@@ -115,24 +118,50 @@ section{
 }
 /*=============================================================================================================*/
 /*=============================================================================================================*/
+.item-image{
+    @include adaptiv-value('width', 200, 150, 1);
+    img {
+        max-width: 100%;
+    }
+}
 .form {
+    &__images {
+        margin-bottom: rem(20);
+        display: flex;
+        flex-wrap: wrap;
+        @include adaptiv-value('gap', 15, 10, 1);
+    }
     &__item {
         @include adaptiv-value("margin-bottom", 18, 12, 1);
         &_none {
             display: none;
         }
     }
-    &__error{
+    &__error {
         font-size: rem(11);
         color: var(--red);
         margin-top: rem(3);
+    }
+    &__image{
+        @include adaptiv-value('width', 200, 150, 1);
+        margin-bottom: rem(10);
+        img {
+            max-width: 100%;
+        }
     }
 }
 
 .necessarily {
     color: var(--red);
 }
+.date {
+    padding: rem(3) rem(10);
+    color: var(--grey);
+    background-color: rgb(231, 231, 231);
+    font-size: rem(12);
 
+    border-radius: rem(4);
+}
 .input {
     background-color: transparent;
     &_readonly {
@@ -140,8 +169,6 @@ section{
         color: var(--blue);
         background: var(--main);
     }
-
-
 }
 
 .label {
@@ -152,6 +179,9 @@ section{
 
 .textarea,
 .input {
+    &_image {
+        display: none;
+    }
     font-size: rem(13);
     border: 1px solid rgb(72, 72, 72);
     @include adaptiv-value("border-radius", 10, 7, 1);
@@ -161,7 +191,7 @@ section{
     @include adaptiv-value("padding-left", 10, 5, 1);
     @include adaptiv-value("padding-right", 10, 5, 1);
     width: 100%;
-    &.error{
+    &.error {
         border: 1px solid var(--red);
     }
 }
@@ -172,12 +202,16 @@ section{
 }
 
 .button-border {
+    cursor: pointer;
+    display: inline-block;
     text-align: center;
     border: 1px solid var(--yellow);
     padding: rem(10) rem(38);
     color: var(--yellow);
     @include adaptiv-value("border-radius", 14, 10, 1);
-    transition: color 0.3s ease, border-color 0.3s ease;
+    transition:
+        color 0.3s ease,
+        border-color 0.3s ease;
 
     &:focus {
         border: 1px solid var(--yellow-hover2);
@@ -192,9 +226,7 @@ section{
     }
 }
 
-
-
-.login{
+.login {
     flex: 1 1 auto;
     padding-bottom: rem(30);
     padding-top: rem(30);
@@ -202,73 +234,171 @@ section{
     display: flex;
     justify-content: center;
     align-items: center;
-    &__title{
+    &__title {
         max-width: rem(560);
         margin: 0 auto;
-        @include adaptiv-value('margin-bottom', 30, 20, 1);
+        @include adaptiv-value("margin-bottom", 30, 20, 1);
     }
-    &__form{
+    &__form {
         margin: 0 auto;
         max-width: rem(420);
     }
-    .button{
+    .button {
         width: 100%;
     }
 }
 
 .admin-panel {
+
+
     flex: 1 1 auto;
     padding: rem(30) 0;
-    @media (max-width: $md3){
+    @media (max-width: $md3) {
         padding: rem(15) 0;
     }
     display: flex;
     flex-direction: column;
+    &__top{
+        @media (min-width: $md3){
+            display: flex;
+            justify-content: space-between;
+
+            column-gap: rem(15);
+        }
+    }
+    &__delete{
+        background-color: var(--red);
+        margin-top: rem(10);
+        transition: background-color 0.3s ease;
+        &:focus {
+            background-color: rgb(218, 0, 0);
+        }
+        @media (any-hover: hover) {
+            &:hover{
+                background-color: rgb(218, 0, 0);
+            }
+        }
+    }
+    &__add{
+        @media (min-width: $md3){
+            align-self: center;
+            width: auto !important;
+        }
+    }
+    &__container {
+        max-width: rem(1700);
+    }
+    &__form{
+        max-width: rem(600);
+    }
+    textarea{
+        resize: vertical;
+        min-height: rem(100);
+        max-height: rem(400);
+    }
+    tbody {
+        a {
+            color: blue;
+            text-decoration: underline;
+            transition: color 0.1s ease;
+            &:focus {
+                color: var(--yellow);
+            }
+            @media (any-hover: hover) {
+                &:hover {
+                    color: var(--yellow);
+                }
+            }
+        }
+        tr {
+            transition: background-color 0.1s ease;
+            &:nth-child(odd) {
+                background-color: #f3f3f3;
+            }
+            &:focus {
+                background-color: #fff;
+            }
+            @media (any-hover: hover) {
+                &:hover {
+                    background-color: #fffbec;
+                }
+            }
+        }
+    }
+
+    &__title {
+        text-align: left;
+        @include adaptiv-value("margin-bottom", 20, 15, 1);
+    }
     &__container {
         flex: 1 1 auto;
         display: flex;
-        @include adaptiv-value('column-gap', 30, 10, 1);
+        @include adaptiv-value("column-gap", 30, 10, 1);
     }
-
+    .button{
+        width: 100%;
+    }
     &__menu {
         //align-self: stretch;
-        @include adaptiv-value('border-radius', 15, 5, 1);
+        @include adaptiv-value("border-radius", 15, 5, 1);
         background-color: var(--blue);
         height: calc(100vh - rem(60));
         position: sticky;
         top: rem(30);
-        @media (max-width: $md3){
+        @media (max-width: $md3) {
             top: rem(15);
             height: calc(100vh - rem(30));
         }
         color: var(--white);
         display: flex;
         flex-direction: column;
-        @include adaptiv-value('padding-right', 20, 10, 1);
-        @include adaptiv-value('padding-left', 20, 10, 1);
-        @include adaptiv-value('padding-top', 30, 15, 1);
-        @include adaptiv-value('padding-bottom', 30, 15, 1);
+        @include adaptiv-value("padding-right", 20, 10, 1);
+        @include adaptiv-value("padding-left", 20, 10, 1);
+        @include adaptiv-value("padding-top", 30, 15, 1);
+        @include adaptiv-value("padding-bottom", 30, 15, 1);
         flex: 0 0 rem(260);
     }
 
     &__list {
         flex: 1 1 auto;
         margin-bottom: rem(20);
-        @include adaptiv-value('font-size', 20, 16, 1);
+        @include adaptiv-value("font-size", 20, 16, 1);
         font-weight: 700;
+        li {
+            &:not(:last-child) {
+                @include adaptiv-value("margin-bottom", 10, 5, 1);
+            }
+        }
         a {
+            &.router-link-active {
+                color: var(--yellow);
+            }
             transition: color 0.3s ease;
             &:focus {
                 color: var(--yellow);
             }
             @media (any-hover: hover) {
-                &:hover{
+                &:hover {
                     color: var(--yellow);
                 }
             }
         }
     }
-
+    &__image {
+        @include adaptiv-value("width", 40, 30, 1);
+        @include adaptiv-value("height", 40, 30, 1);
+        position: relative;
+        overflow: hidden;
+        border-radius: rem(5);
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
     &__button {
         text-align: center;
     }
@@ -276,20 +406,22 @@ section{
     &__content {
         flex: 1 1 auto;
     }
-
+    &__wrap{
+        overflow-x: auto;
+        max-width: rem(1600);
+    }
     &__table {
+        @include adaptiv-value('font-size', 13.5, 10, 1);
         border-collapse: collapse;
-        overflow: hidden;
         background-color: var(--white);
-
+        border: rem(1) solid #cfcfcf;
         width: 100%;
-        @include adaptiv-value('border-radius', 10, 5, 1);
+        @include adaptiv-value("border-radius", 10, 5, 1);
         tr {
-
         }
         td {
-            @include adaptiv-value('padding', 10, 6, 1);
-            border: rem(1) solid #CFCFCF;
+            @include adaptiv-value("padding", 10, 6, 1);
+            border: rem(1) solid #cfcfcf;
         }
     }
 
@@ -297,3 +429,28 @@ section{
     }
 }
 
+
+.properties {
+    &__labels {
+      display: flex;
+      flex-wrap: wrap;
+
+      @media (min-width: $md3) {
+
+        justify-content: flex-end;
+      }
+
+      justify-content: center;
+      gap: rem(5);
+    }
+
+    &__label {
+      padding: rem(6) rem(15);
+      color: var(--white);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: rem(10);
+      background-color: var(--yellow);
+      border-radius: rem(6);
+    }
+  }

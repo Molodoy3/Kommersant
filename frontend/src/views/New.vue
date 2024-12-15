@@ -23,7 +23,7 @@ axios.get(routes.articles + idNew)
           <picture>
             <source :srcset='article.image + ".webp"' :type='"image/webp"'>
             <source :srcset='article.image + "." + article.image_extension' :type='"image/" + article.image_extension'>
-            <img v-lazy='article.image + ".webp"' alt='объект недвижимости'>
+            <img v-lazy='article.image + ".webp"'>
           </picture>
         </div>
         <div class="new__info">

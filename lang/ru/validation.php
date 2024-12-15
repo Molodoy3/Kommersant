@@ -161,6 +161,7 @@ return [
         'email' => 'почта',
         'comment' => 'комментарий',
         'user_price' => 'цена для торга',
-        'telephone' => 'телефон',
+        'title' => 'название',
+        'description' => 'описание',
     ],
 ];

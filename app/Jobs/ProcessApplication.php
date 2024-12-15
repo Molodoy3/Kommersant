@@ -40,7 +40,7 @@ class ProcessApplication implements ShouldQueue
         $chatIds = [
             992083441,
             6251517297, //Вася
-            //5293252073, //Джавад
+            5293252073, //Джавад
         ];
         // Отправляем уведомление каждому идентификатору чата
         foreach ($chatIds as $chatId) {
