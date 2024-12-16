@@ -10,5 +10,5 @@ class TransactionType extends Model
     /** @use HasFactory<\Database\Factories\TransactionTypeFactory> */
     use HasFactory;
 
-    protected $hidden = ['id', 'updated_at', 'created_at'];
+    protected $hidden = ['updated_at'];
 }

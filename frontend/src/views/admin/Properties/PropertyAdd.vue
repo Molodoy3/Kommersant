@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import {routes} from "@/api.config.js";
-import {nextTick, onMounted, ref} from "vue";
+import {nextTick, ref} from "vue";
 import router from "@/router";
 
 const errors = ref<any>({})
@@ -44,19 +44,25 @@ axios.get(routes.infoByProperties).then((res) => {
   console.error(res.error)
 })
 
-onMounted(()=> {
-
-})
-
 async function submit() {
   const form = document.forms.namedItem('form') as HTMLFormElement | null;
   if (form) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
 
     const formData = new FormData(form)
+
+    const labelsSelect = document.querySelector('#labels') as HTMLSelectElement | null;
+    if (labelsSelect && labelsSelect.multiple) {
+      const selectedOptions: HTMLOptionElement[] = Array.from(labelsSelect.selectedOptions);
+      if (selectedOptions.length) {
+        const selectedValues: string[] = selectedOptions.map(option => option.value);
+        formData.append('labels', JSON.stringify(selectedValues));
+      }
+    }
+
     await axios.post(routes.properties, formData)
       .then(() => {
-        router.push({name: 'admin_news'})
+        //router.push({name: 'admin_properties'})
       })
       .catch(res => {
         errors.value = res.response.data.errors
@@ -70,9 +76,9 @@ async function submit() {
   <h1 class="admin-panel__title title">Добавление нового объекта</h1>
   <form v-if="infoByProperties" @submit.prevent="submit" name="form" action="" class="admin-panel__form form" enctype="multipart/form-data">
     <div class="form__item">
-      <label for="title" class="label">Название</label>
-      <input :class="errors.title ? 'error' : null" name="title" id="title" type="text" class="input"/>
-      <div v-if="errors.title" class="form__error">{{ errors.title[0] }}</div>
+      <label for="name" class="label">Название</label>
+      <input :class="errors.name ? 'error' : null" name="name" id="name" type="text" class="input"/>
+      <div v-if="errors.name" class="form__error">{{ errors.name[0] }}</div>
     </div>
     <div class="form__item">
       <label for="description" class="label">Описание</label>
@@ -91,8 +97,8 @@ async function submit() {
     </div>
     <div class="form__item">
       <label for="prise" class="label">Тип объекта</label>
-      <select>
-        <option v-for="item in infoByProperties.types" name="type" :value="item.id">{{item.name}}</option>
+      <select name="type">
+        <option v-for="item in infoByProperties.types" :value="item.id">{{item.name}}</option>
       </select>
       <div v-if="errors.type" class="form__error">{{ errors.type }}</div>
     </div>
@@ -122,26 +128,27 @@ async function submit() {
       <div v-if="errors.longitude" class="form__error">{{ errors.longitude[0] }}</div>
     </div>
     <div class="form__item">
-      <label for="prise" class="label">Надписи</label>
-      <select multiple>
+      <label class="label">Надписи</label>
+      <select id="labels" multiple>
         <option v-for="item in infoByProperties.labels" name="type" :value="item.id">{{item.name}}</option>
       </select>
+      <div v-if="errors.labels" class="form__error">{{ errors.labels[0] }}</div>
     </div>
     <div class="form__item">
       <label for="prise" class="label">Тип продажи</label>
-      <select>
+      <select name="transactionType">
         <option v-for="item in infoByProperties.transactionTypes" name="type" :value="item.id">{{item.name}}</option>
       </select>
       <div v-if="errors.transactionType" class="form__error">{{ errors.transactionType }}</div>
     </div>
     <div class="form__item">
       <label for="image" class="label">Картинки</label>
-      <input multiple class="input_image" type="file" name="image" id="image" accept="image/*"
+      <input multiple class="input_image" type="file" name="images[]" id="image" accept="image/*"
       />
       <div class="form__images">
       </div>
       <label for="image" class="button-border">Загрузить изображения</label>
-      <div v-if="errors.image" class="form__error">{{ errors.image }}</div>
+      <div v-if="errors.images" class="form__error">{{ errors.images }}</div>
     </div>
 
     <button class="button" type="submit">Сохранить</button>

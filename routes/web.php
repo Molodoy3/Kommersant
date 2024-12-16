@@ -43,8 +43,11 @@ Route::group(['prefix' => 'api', 'middleware' => ['throttle:api']], function () 
 
     //объекты недвижимости
     Route::get('/properties-recent', [PropertyController::class, 'recent']);
-    Route::get('/property/{id}', [PropertyController::class, 'get']);
+    Route::get('/properties/{id}', [PropertyController::class, 'get']);
     Route::get('/properties', [PropertyController::class, 'index']);
+    Route::post('/properties', [PropertyController::class, 'create'])->middleware('auth:sanctum');
+    Route::patch('/properties/{id}', [PropertyController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/properties/{id}', [PropertyController::class, 'delete'])->middleware('auth:sanctum');
 
     Route::get('/info-by-properties/', [PropertyController::class, 'infoByProperties']);
 

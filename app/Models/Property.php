@@ -14,6 +14,7 @@ class Property extends Model
     /** @use HasFactory<\Database\Factories\PropertyFactory> */
     use HasFactory;
 
+    protected $fillable = ['name', 'description', 'prise', 'address', 'type_property_id', 'transaction_type_id', 'square', 'latitude', 'longitude', 'link', 'labels'];
     protected $hidden = ['updated_at'];
 
     public function type():BelongsTo

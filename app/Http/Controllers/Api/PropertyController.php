@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Data\PropertyData;
 use App\Http\Controllers\Controller;
 use App\Models\Label;
 use App\Models\Property;
+use App\Models\PropertyLabel;
 use App\Models\TransactionType;
 use App\Models\TypeProperty;
+use App\Services\ImageConverter;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
 class PropertyController extends Controller
 {
-    public function recent() {
+    public function recent(): JsonResponse
+    {
         return response()->json(
           Property::with(['labels', 'type', 'transactionType'])->orderByDesc('created_at')->take(8)->get()
               ->each(function ($item) {
@@ -22,7 +28,7 @@ class PropertyController extends Controller
               })
         );
     }
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         return response()->json(
             Property::with(['labels', 'type', 'transactionType'])
@@ -60,7 +66,8 @@ class PropertyController extends Controller
         }
         return $item;
     }
-    public function get($id) {
+    public function get($id): JsonResponse
+    {
         //берем картинки
         $images = Storage::disk('public')->files('properties/'.$id);
         $formattedImages = [];
@@ -82,12 +89,66 @@ class PropertyController extends Controller
             $property
         );
     }
-    public function infoByProperties() {
+    public function infoByProperties(): JsonResponse
+    {
         $data = [];
         $data['labels'] = Label::all();
         $data['transactionTypes'] = TransactionType::all();
         $data['types'] = TypeProperty::all();
 
         return response()->json($data);
+    }
+    public function create(Request $request)
+    {
+        $data = $request->input();
+        PropertyData::validate($data);
+
+        if ($request->allFiles() && $request->allFiles()['images']) {
+
+            //так как названия из полученных не соответсвуют, меняем
+            $data['type_property_id'] = $data['type'] ?? 1;
+            unset($data['type']);
+            $data['transaction_type_id'] = $data['transactionType'] ?? 1;
+            unset($data['transactionType']);
+
+            //надписи изымыем, чтобы не мешались
+            $labels = json_decode($data['labels']);
+            unset($data['labels']);
+
+            $newProperty = Property::query()->create($data);
+
+            //надписи добавляем в связующую таблицу
+            foreach ($labels as $labelId) {
+                PropertyLabel::query()->updateOrCreate([
+                    'property_id' => $newProperty->id,
+                    'label_id' => $labelId
+                ]);
+            }
+            foreach ($request->allFiles()['images'] as $image) {
+                $extension = $image->getClientOriginalExtension();
+                $uniqueName = Str::uuid()->toString() . '.' . $extension;
+                $path = "properties/{$newProperty->id}/" . $uniqueName;
+                try {
+                    Storage::disk('public')->putFileAs("properties/{$newProperty->id}", $image, $uniqueName);
+                    ImageConverter::convertWebp($path);
+                } catch (\Exception $e) {
+                    Log::error("Error creating article: " . $e->getMessage());
+                    return response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create property']], 500);
+                }
+            }
+        } else {
+            return response()->json(['status'=>'error', 'errors' => ['images' => 'Загрузите хотя бы одну картинку']], 422);
+        }
+
+        return response()->json(['message' => 'Property created'], 201);
+    }
+    public function delete($id): JsonResponse
+    {
+        $property = Property::query()->findOrFail($id);
+        if ($property) {
+            $property->delete();
+            return response()->json(['status' => 'success', 'message' => 'Property has been deleted'], 200);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Property not found'], 404);
     }
 }

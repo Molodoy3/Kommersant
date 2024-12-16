@@ -10,5 +10,5 @@ class Label extends Model
     /** @use HasFactory<\Database\Factories\LabelFactory> */
     use HasFactory;
 
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = ['created_at'];
 }

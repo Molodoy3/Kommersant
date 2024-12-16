@@ -71,8 +71,11 @@ router.beforeEach(async (to, from, next) => {
 
     const check = await isAuthenticated()
     //проверяем токен авторизации. Если не прошел проверку, на страницу авторизации
-    if (!check)
+    if (!check) {
+      // для дальнейшей переадресации сохраняем путь
+      localStorage.setItem('redirectFrom', to.fullPath || '/admin/home');
       next({name: 'admin_login'})
+    }
     else
       next()
   }

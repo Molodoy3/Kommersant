@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PropertyLabel extends Model
 {
     use HasFactory;
-    protected $hidden = ['id', 'updated_at', 'created_at'];
+    protected $fillable = ['property_id', 'label_id', 'id'];
+    protected $hidden = ['updated_at'];
     protected $table = 'property_label';
 }

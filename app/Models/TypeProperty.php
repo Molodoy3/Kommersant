@@ -10,5 +10,5 @@ class TypeProperty extends Model
     /** @use HasFactory<\Database\Factories\TypePropertyFactory> */
     use HasFactory;
 
-    protected $hidden = ['id', 'updated_at', 'created_at'];
+    protected $hidden = ['updated_at'];
 }

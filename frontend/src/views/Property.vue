@@ -7,11 +7,12 @@ import Preloader from "@/components/Preloader.vue";
 import { Swiper } from 'swiper';
 import { Navigation, Pagination, Keyboard, Mousewheel, Thumbs } from 'swiper/modules';
 import Arrow from "@/components/icons/Arrow.vue";
+import {routes} from "@/api.config.js";
 
 const idProperty = useRoute().params.id;
 const property = ref<any | null>(null);
 
-axios.get('property/' + idProperty)
+axios.get(routes.properties + '/' + idProperty)
   .then(res => {
     property.value = res.data
   }).catch(error => {

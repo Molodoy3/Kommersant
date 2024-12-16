@@ -16,7 +16,14 @@ async function submit() {
       .then((data) => {
         //устанавливаем токен в локальное хранилище
         localStorage.setItem('authToken', data.data.token);
-        router.push({name: 'admin_home'});
+        const redirectFrom = localStorage.getItem('redirectFrom');
+        if (redirectFrom) {
+          console.log(redirectFrom)
+          router.push(redirectFrom);
+        }
+        else
+          router.push({name: 'admin_home'});
+        console.log(redirectFrom)
       })
       .catch(errors => {
         error.value.value = errors.response.data.error

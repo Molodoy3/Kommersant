@@ -88,7 +88,7 @@ async function deleteElement() {
 
 <template>
   <NotFound v-if="!isFind"/>
-  <h1  v-if="element" class="admin-panel__title title">{{title}} — редактирование</h1>
+  <h1 v-if="element" class="admin-panel__title title">{{title}} — редактирование</h1>
   <form v-if="element" @submit.prevent="submit" name="form" action="" class="admin-panel__form form" enctype="multipart/form-data">
     <div class="form__item">
       <label for="title" class="label">Название</label>
