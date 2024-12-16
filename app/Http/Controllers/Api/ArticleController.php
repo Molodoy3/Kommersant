@@ -96,13 +96,13 @@ class ArticleController extends Controller
                 Storage::disk('public')->delete('articles/' . pathinfo(basename($article->image), PATHINFO_FILENAME) . '.webp');
 
                 $path = 'articles/' . $uniqueName;
-                Storage::disk('public')->put($path, file_get_contents($image->getRealPath()));
+                Storage::disk('public')->putFileAs('articles', $image, $uniqueName);
                 ImageConverter::convertWebp($path);
 
                 $request->image = $uniqueName;
 
             }
-            //приходится делать так, так как просто $request->image = 'fff' нифига не меняет картинку и $request->all() все равно старую возвращает
+            //приходится делать так, так как просто $request->image = 'fff' нифига не меняет картинку и $request->input() все равно старую возвращает
             $article->update([
                 'title' => request('title'),
                 'description' => request('description'),

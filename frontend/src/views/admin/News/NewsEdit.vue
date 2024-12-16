@@ -75,7 +75,7 @@ async function submit() {
 
 async function deleteElement() {
   if (confirm('Вы уверены что хотите удалить запись?')) {
-    await axios.delete(routes.articles + id).then(() => {
+    await axios.delete(routes.articles + '/' + id).then(() => {
       router.push({name: 'admin_news'})
     }).catch(() => {
       alert('произошла ошибка')
