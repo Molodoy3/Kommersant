@@ -64,8 +64,10 @@ router.beforeEach(async (to, from, next) => {
   //проверяем есть ли мета тег проверки авторизации
   if (to.meta.requiresAuth) {
     const token = localStorage.getItem('authToken')
-    if (token)
+    if (token) {
+      //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
 
     const check = await isAuthenticated()
     //проверяем токен авторизации. Если не прошел проверку, на страницу авторизации
@@ -91,6 +93,7 @@ router.beforeEach(async (to, from, next) => {
 });
 async function isAuthenticated(): Promise<boolean> {
   try {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
     const response = await axios.get(routes.api_token);
     return response.data.authenticated;
   } catch (error) {
