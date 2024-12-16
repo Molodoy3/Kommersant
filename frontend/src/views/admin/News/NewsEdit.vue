@@ -18,7 +18,7 @@ const errors = ref<any>({})
 //если нет такой записи
 const isFind = ref<boolean>(true)
 
-axios.get(routes.articles + id)
+axios.get(routes.articles  + "/" + id)
   .then(res => {
     element.value = res.data
     title = element.value.title;
@@ -63,7 +63,7 @@ async function submit() {
     // благодаря чему ларавел будет принимать как put запрос
     formData.append('_method', 'PATCH');
 
-    await axios.post(routes.articles + element.value.id, formData)
+    await axios.post(routes.articles + "/" + element.value.id, formData)
       .then(res => {
         router.push({name: 'admin_news'})
       })

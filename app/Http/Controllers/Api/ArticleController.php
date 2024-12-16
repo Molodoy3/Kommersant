@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Services\ImageConverter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -55,16 +56,21 @@ class ArticleController extends Controller
             $uniqueName = Str::uuid()->toString() . '.' . $extension;
 
             $path = 'articles/' . $uniqueName;
-            Storage::disk('public')->put($path, file_get_contents($image->getRealPath()));
-            ImageConverter::convertWebp($path);
+            try {
+                Storage::disk('public')->putFileAs('articles', $image, $uniqueName);
+                ImageConverter::convertWebp($path); //This might need error handling too.
 
-            Article::query()->create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => $uniqueName,
-            ]);
+                Article::query()->create([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'image' => $uniqueName,
+                ]);
 
-            return response()->json(['message' => 'Article created'], 201);
+                return response()->json(['message' => 'Article created'], 201);
+            } catch (\Exception $e) {
+                Log::error("Error creating article: " . $e->getMessage());
+                return response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create article']], 500);
+            }
         }
         else {
             return response()->json(['status'=>'error', 'errors' => ['image' => 'Загрузите картинку']], 422);
