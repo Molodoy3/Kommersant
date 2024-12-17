@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRoute } from "vue-router";
-import { nextTick, onMounted, ref, watchEffect } from "vue";
+import { nextTick, ref, watchEffect } from "vue";
 import Preloader from "@/components/Preloader.vue";
 import { Swiper } from 'swiper';
 import { Navigation, Pagination, Keyboard, Mousewheel, Thumbs } from 'swiper/modules';
@@ -173,7 +173,7 @@ watchEffect(async () => {
     <div v-if="property" class="property__map" style="position:relative;overflow:hidden;">
       <iframe
         :src="'https://yandex.ru/map-widget/v1/?indoorLevel=1&ll=' + property.latitude + '%2C' + property.longitude + '&mode=whatshere&whatshere%5Bpoint%5D=' + property.longitude + '%2C' + property.latitude + '&whatshere%5Bzoom%5D=17&z=17.26'"
-        frameborder="1" allowfullscreen="true" style="position:relative;">
+         allowfullscreen="true" style="position:relative;">
       </iframe>
     </div>
   </section>

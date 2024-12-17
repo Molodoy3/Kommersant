@@ -35,7 +35,7 @@ onMounted(()=> {
 async function submit() {
   const form = document.forms.namedItem('form') as HTMLFormElement | null;
   if (form) {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
 
     const formData = new FormData(form)
     await axios.post(routes.articles, formData)

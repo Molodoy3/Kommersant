@@ -96,7 +96,7 @@ router.beforeEach(async (to, from, next) => {
 });
 async function isAuthenticated(): Promise<boolean> {
   try {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
     const response = await axios.get(routes.api_token);
     return response.data.authenticated;
   } catch (error) {

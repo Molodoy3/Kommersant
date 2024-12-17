@@ -10,6 +10,7 @@ use App\Models\PropertyLabel;
 use App\Models\TransactionType;
 use App\Models\TypeProperty;
 use App\Services\ImageConverter;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -43,8 +44,8 @@ class PropertyController extends Controller
     }
     private function processProperties($item)
     {
-        $item->description = Str::limit($item->description, 200, '...');
-        $item->address = Str::limit($item->description,25, '...');
+        $item->description = Str::limit($item->description, 200);
+        $item->address = Str::limit($item->description,25);
 
         // Получаем все файлы в директории properties/{id}
         $files = Storage::disk('public')->files('properties/' . $item->id);
@@ -98,20 +99,20 @@ class PropertyController extends Controller
 
         return response()->json($data);
     }
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = $request->input();
         PropertyData::validate($data);
 
         if ($request->allFiles() && $request->allFiles()['images']) {
 
-            //так как названия из полученных не соответсвуют, меняем
+            //так как названия из полученных не соответствуют, меняем
             $data['type_property_id'] = $data['type'] ?? 1;
             unset($data['type']);
             $data['transaction_type_id'] = $data['transactionType'] ?? 1;
             unset($data['transactionType']);
 
-            //надписи изымыем, чтобы не мешались
+            //надписи изымем, чтобы не мешались
             $labels = json_decode($data['labels']);
             unset($data['labels']);
 
@@ -124,31 +125,71 @@ class PropertyController extends Controller
                     'label_id' => $labelId
                 ]);
             }
-            foreach ($request->allFiles()['images'] as $image) {
-                $extension = $image->getClientOriginalExtension();
-                $uniqueName = Str::uuid()->toString() . '.' . $extension;
-                $path = "properties/{$newProperty->id}/" . $uniqueName;
-                try {
-                    Storage::disk('public')->putFileAs("properties/{$newProperty->id}", $image, $uniqueName);
-                    ImageConverter::convertWebp($path);
-                } catch (\Exception $e) {
-                    Log::error("Error creating article: " . $e->getMessage());
-                    return response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create property']], 500);
-                }
-            }
+            $this->downloadImages($request, $newProperty->id);
         } else {
             return response()->json(['status'=>'error', 'errors' => ['images' => 'Загрузите хотя бы одну картинку']], 422);
         }
 
         return response()->json(['message' => 'Property created'], 201);
     }
+    public function update(Request $request, $id)
+    {
+        $data = $request->input();
+        PropertyData::validate($data);
+        $property = Property::query()->findOrFail($id);
+
+        $data['type_property_id'] = $data['type'] ?? 1;
+        unset($data['type']);
+        $data['transaction_type_id'] = $data['transactionType'] ?? 1;
+        unset($data['transactionType']);
+
+        //надписи изымем, чтобы не мешались
+        $labels = json_decode($data['labels']);
+        unset($data['labels']);
+
+        $property->update($data);
+
+        $imagesForDel = json_decode($data['imagesForDel']);
+        if ($imagesForDel) {
+            foreach ($imagesForDel as $image) {
+                //return 'properties/'.$id.'/'.pathinfo($image, PATHINFO_FILENAME).'.'.pathinfo($image, PATHINFO_EXTENSION);
+                // ищем все файлы с разными расширениями под именем полученного и удаляем
+                $currentImages = glob(storage_path('app/public/properties/'.$id.'/'.pathinfo($image, PATHINFO_FILENAME)).'.*');
+                foreach ($currentImages as $currentImage) {
+                    //return str_replace(storage_path('app/public/'), '', $currentImage);
+                    Storage::disk('public')->delete(str_replace(storage_path('app/public/'), '', $currentImage));
+                }
+            }
+        }
+
+        if ($request->allFiles() && $request->allFiles()['images']) {
+            $this->downloadImages($request, $id);
+        }
+
+        return response()->json(['message' => 'Property updated', 'property' => $property]);
+    }
     public function delete($id): JsonResponse
     {
         $property = Property::query()->findOrFail($id);
         if ($property) {
             $property->delete();
-            return response()->json(['status' => 'success', 'message' => 'Property has been deleted'], 200);
+            return response()->json(['status' => 'success', 'message' => 'Property has been deleted']);
         }
         return response()->json(['status' => 'error', 'message' => 'Property not found'], 404);
+    }
+    private function downloadImages($request, $id)
+    {
+        foreach ($request->allFiles()['images'] as $image) {
+            $extension = $image->getClientOriginalExtension();
+            $uniqueName = Str::uuid()->toString() . '.' . $extension;
+            $path = "properties/$id/$uniqueName";
+            try {
+                Storage::disk('public')->putFileAs("properties/$id", $image, $uniqueName);
+                ImageConverter::convertWebp($path);
+            } catch (Exception $e) {
+                Log::error("Error creating article: " . $e->getMessage());
+                return response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create property']], 500);
+            }
+        }
     }
 }

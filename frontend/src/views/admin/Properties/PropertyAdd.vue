@@ -23,7 +23,7 @@ axios.get(routes.infoByProperties).then((res) => {
         if (target && target.files) {
           images = target.files;
           if (form) {
-            const wrap = form.querySelector(".form__images");
+            const wrap = form.querySelector(".form__download-images");
             if (wrap) {
               for (let i = 0; i < images.length; i++) {
                 const item = document.createElement('div');
@@ -47,7 +47,7 @@ axios.get(routes.infoByProperties).then((res) => {
 async function submit() {
   const form = document.forms.namedItem('form') as HTMLFormElement | null;
   if (form) {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
 
     const formData = new FormData(form)
 
@@ -62,7 +62,7 @@ async function submit() {
 
     await axios.post(routes.properties, formData)
       .then(() => {
-        //router.push({name: 'admin_properties'})
+        router.push({name: 'admin_properties'})
       })
       .catch(res => {
         errors.value = res.response.data.errors
@@ -145,7 +145,7 @@ async function submit() {
       <label for="image" class="label">Картинки</label>
       <input multiple class="input_image" type="file" name="images[]" id="image" accept="image/*"
       />
-      <div class="form__images">
+      <div class="form__download-images">
       </div>
       <label for="image" class="button-border">Загрузить изображения</label>
       <div v-if="errors.images" class="form__error">{{ errors.images }}</div>

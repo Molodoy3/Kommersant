@@ -74,7 +74,7 @@ async function submitApplication() {
   const form = document.forms.namedItem('application') as HTMLFormElement | null;
   if (form) {
     const formData = new FormData(form);
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get('/csrf-token').then(res => res.data);
 
     let loadingTimeout = setTimeout(() => {
       isLoading.value = true;

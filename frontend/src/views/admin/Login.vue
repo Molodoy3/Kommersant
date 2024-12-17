@@ -11,7 +11,7 @@ async function submit() {
   const form = document.forms.namedItem('login') as HTMLFormElement | null;
   if (form) {
     const formData = new FormData(form);
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
+    //axios.defaults.headers.common['X-CSRF-TOKEN'] = await axios.get(routes.csrf).then(res => res.data)
     await axios.post(routes.admin_login, formData)
       .then((data) => {
         //устанавливаем токен в локальное хранилище

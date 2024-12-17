@@ -15,9 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // отключаем csrf токен для апи запросов
-        $middleware->validateCsrfTokens(except: [
+        /*$middleware->validateCsrfTokens(except: [
             'api/*'
-        ]);
+        ]);*/
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
