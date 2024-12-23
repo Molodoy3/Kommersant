@@ -20,6 +20,9 @@ use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
+    /**
+     * @return JsonResponse
+     */
     public function recent(): JsonResponse
     {
         return response()->json(
@@ -33,6 +36,7 @@ class PropertyController extends Controller
     {
         return response()->json(
             Property::with(['labels', 'type', 'transactionType'])
+                ->orderByDesc('created_at')
                 ->paginate(16)
                 ->withPath($request->path ?? '/properties')
                 ->through(
@@ -113,7 +117,11 @@ class PropertyController extends Controller
             unset($data['transactionType']);
 
             //надписи изымем, чтобы не мешались
-            $labels = json_decode($data['labels']);
+            $labels = [];
+            if (isset($data['labels'])) {
+                $labels = json_decode($data['labels']);
+            }
+
             unset($data['labels']);
 
             $newProperty = Property::query()->create($data);
@@ -132,7 +140,7 @@ class PropertyController extends Controller
 
         return response()->json(['message' => 'Property created'], 201);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $data = $request->input();
         PropertyData::validate($data);
@@ -144,15 +152,26 @@ class PropertyController extends Controller
         unset($data['transactionType']);
 
         //надписи изымем, чтобы не мешались
-        $labels = json_decode($data['labels']);
-        unset($data['labels']);
+        $labels = [];
+        if (isset($data['labels'])) {
+            $labels = json_decode($data['labels']);
+            unset($data['labels']);
+        }
+
 
         $property->update($data);
+
+        PropertyLabel::query()->where(['property_id' => $id])->delete();
+        foreach ($labels as $labelId) {
+            PropertyLabel::query()->updateOrCreate([
+                'property_id' => $property->id,
+                'label_id' => $labelId
+            ]);
+        }
 
         $imagesForDel = json_decode($data['imagesForDel']);
         if ($imagesForDel) {
             foreach ($imagesForDel as $image) {
-                //return 'properties/'.$id.'/'.pathinfo($image, PATHINFO_FILENAME).'.'.pathinfo($image, PATHINFO_EXTENSION);
                 // ищем все файлы с разными расширениями под именем полученного и удаляем
                 $currentImages = glob(storage_path('app/public/properties/'.$id.'/'.pathinfo($image, PATHINFO_FILENAME)).'.*');
                 foreach ($currentImages as $currentImage) {
@@ -177,7 +196,7 @@ class PropertyController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'Property not found'], 404);
     }
-    private function downloadImages($request, $id)
+    private function downloadImages($request, $id): void
     {
         foreach ($request->allFiles()['images'] as $image) {
             $extension = $image->getClientOriginalExtension();
@@ -188,7 +207,8 @@ class PropertyController extends Controller
                 ImageConverter::convertWebp($path);
             } catch (Exception $e) {
                 Log::error("Error creating article: " . $e->getMessage());
-                return response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create property']], 500);
+                response()->json(['status' => 'error', 'errors' => ['image' => 'Failed to create property']], 500);
+                return;
             }
         }
     }

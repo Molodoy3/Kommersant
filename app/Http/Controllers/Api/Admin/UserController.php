@@ -18,14 +18,17 @@ class UserController extends Controller
         if (RateLimiter::tooManyAttempts($request->ip(), $maxAttempts))
             return response()->json(['error' => 'Превышен лимит попыток входа. Попробуйте позже.'], 429);
 
-        $user = User::query()->where('name', $request->name)->first();
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            RateLimiter::hit($request->ip());
-            return response()->json(['error' => 'Данные введены неправильно'], 401);
+        if (isset($request->name) && isset($request->password)) {
+            $user = User::query()->where('name', $request->name)->first();
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                RateLimiter::hit($request->ip());
+                return response()->json(['error' => 'Данные введены неправильно'], 401);
+            }
+            return response()->json([
+                'token' => $user->createToken('api_token')->plainTextToken
+            ]);
         }
-        return response()->json([
-            'token' => $user->createToken('api_token')->plainTextToken
-        ]);
+        return response()->json(['error' => 'bad request'], 400);
     }
     public function checkApiToken(): JsonResponse
     {

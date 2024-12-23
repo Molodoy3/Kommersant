@@ -34,8 +34,16 @@ Route::group(['middleware' => ['throttle:api']], function () {
 
     //категории для услуг
     Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{id}', [CategoryController::class, 'get']);
+    Route::post('/categories', [CategoryController::class, 'create'])->middleware('auth:sanctum');
+    Route::patch('/categories/{id}', [CategoryController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/categories/{id}', [CategoryController::class, 'delete'])->middleware('auth:sanctum');
     //услуги
     Route::get('/services', [ServiceController::class, 'index']);
+    Route::get('/services/{id}', [ServiceController::class, 'get']);
+    Route::post('/services', [ServiceController::class, 'create'])->middleware('auth:sanctum');
+    Route::patch('/services/{id}', [ServiceController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/services/{id}', [ServiceController::class, 'delete'])->middleware('auth:sanctum');
 
     //объекты недвижимости
     Route::get('/properties-recent', [PropertyController::class, 'recent']);

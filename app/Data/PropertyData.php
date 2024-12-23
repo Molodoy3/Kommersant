@@ -23,8 +23,8 @@ class PropertyData extends Data
         public int $latitude,
         public int $longitude,
         #[Max(255)]
-        public string $link,
-        //public string $labels,
+        public ?string $link,
+        public ?string $labels,
     )
     {
     }

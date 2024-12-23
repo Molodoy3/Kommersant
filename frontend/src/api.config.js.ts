@@ -6,4 +6,6 @@ export const routes: {[key: string]: string} = {
   api_token: '/admin/check-api-token',
   properties: '/properties',
   infoByProperties: '/info-by-properties',
+  categories: '/categories',
+  services: '/services',
 }

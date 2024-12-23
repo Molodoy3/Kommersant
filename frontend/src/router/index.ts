@@ -17,6 +17,12 @@ import NewAdd from "@/views/admin/News/NewAdd.vue";
 import PropertiesAdmin from "@/views/admin/Properties/PropertiesAdmin.vue";
 import PropertyAdd from "@/views/admin/Properties/PropertyAdd.vue";
 import PropertyEdit from "@/views/admin/Properties/PropertyEdit.vue";
+import CategoryAdmin from "@/views/admin/Categories/CategoryAdmin.vue";
+import CategoryEdit from "@/views/admin/Categories/CategoryEdit.vue";
+import CategoryAdd from "@/views/admin/Categories/CategoryAdd.vue";
+import ServicesAdmin from "@/views/admin/Services/ServicesAdmin.vue";
+import ServicesEdit from "@/views/admin/Services/ServicesEdit.vue";
+import ServicesAdd from "@/views/admin/Services/ServicesAdd.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +59,14 @@ const router = createRouter({
         {path: 'properties', name: "admin_properties", component: PropertiesAdmin, meta: {title: 'Объекты'}},
         {path: 'properties/edit/:id', name: "admin_properties_edit", component: PropertyEdit},
         {path: 'properties/add', name: "admin_properties_add", component: PropertyAdd},
+
+        {path: 'categories', name: "admin_categories", component: CategoryAdmin, meta: {title: 'Категории'}},
+        {path: 'categories/edit/:id', name: "admin_categories_edit", component: CategoryEdit},
+        {path: 'categories/add', name: "admin_categories_add", component: CategoryAdd},
+
+        {path: 'services', name: "admin_services", component: ServicesAdmin, meta: {title: 'Услуги'}},
+        {path: 'services/edit/:id', name: "admin_services_edit", component: ServicesEdit},
+        {path: 'services/add', name: "admin_services_add", component: ServicesAdd},
       ],
       meta: { requiresAuth: true }
     }

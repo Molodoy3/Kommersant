@@ -25,7 +25,7 @@ class Property extends Model
     {
         return $this->BelongsTo(TransactionType::class, 'transaction_type_id');
     }
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtAttribute($value): ?string
     {
         return $value ? Carbon::parse($value)->format('d.m.y') : null;
     }
@@ -33,7 +33,7 @@ class Property extends Model
     {
         return $this->belongsToMany(Label::class, 'property_label');
     }
-    public function getPriseAttribute($value)
+    public function getPriseAttribute($value): string
     {
         $editedPrice = number_format($value, 0, '.', ' ');
         return $this->transaction_type_id == 1 ? $editedPrice . 'р/мес.' : $editedPrice . 'р.';
