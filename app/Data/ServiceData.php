@@ -9,12 +9,12 @@ use Spatie\LaravelData\Data;
 class ServiceData extends Data
 {
     public function __construct(
-        #[Max(255)]
+        #[Max(500)]
         public string $title,
         #[Max(1000)]
-        public string $description,
+        public ?string $description,
         #[Numeric]
-        public int $price,
+        public ?int $price,
         #[Numeric]
         public int $category_id,
     )

@@ -14,7 +14,7 @@ class CategoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(Category::all());
+        return response()->json(Category::query()->orderByDesc('created_at')->get());
     }
     public function get($id):JsonResponse
     {

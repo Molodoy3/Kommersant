@@ -13,7 +13,7 @@ class ServiceController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(Service::query()->with('category')->get());
+        return response()->json(Service::query()->orderByDesc('created_at')->with('category')->get());
     }
     public function get($id):JsonResponse
     {

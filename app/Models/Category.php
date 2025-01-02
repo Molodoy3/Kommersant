@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['updated_at'];
 
     public function services():HasMany
     {
