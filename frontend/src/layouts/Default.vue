@@ -2,17 +2,10 @@
 
 import { RouterLink, RouterView } from "vue-router";
 import { onMounted, ref } from "vue";
-import { useMeta } from "vue-meta";
 import axios from "axios";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import Tick from "@/components/icons/Tick.vue";
-
-useMeta({
-  title: 'Коммерсант',
-  description: '555',
-  meta: [{ name: 'keywords', content: '45,45' }]
-})
 
 const errors = ref<any>({});
 
@@ -137,9 +130,9 @@ async function submitApplication() {
               <input name="service_id" id="serviceId" type="hidden" readonly />
               <input name="property_id" id="propertyId" type="hidden" readonly />
             </div>
-            <div class="form__item form__item_none">
+            <div class="form__item form__item_none" id="bargaining">
               <label for="name" class="label">Преложите свою цену в рублях (необязательно)</label>
-              <input name="user_price" id="bargainingText" type="text" class="input" />
+              <input :class="errors.user_price ? 'error' : null" name="user_price" id="bargainingText" type="text" class="input" />
               <div v-if="errors.user_price" class="form__error">{{ errors.user_price[0] }}</div>
             </div>
             <div class="form__item">

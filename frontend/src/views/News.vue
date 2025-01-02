@@ -7,6 +7,12 @@ import {useRoute} from 'vue-router';
 import Pagination from "@/components/Pagination.vue";
 import Preloader from "@/components/Preloader.vue";
 import {routes} from "@/api.config.js";
+import {useMeta} from "vue-meta";
+
+useMeta({
+  title: 'Новости — Агентство недвижимости Коммерсант',
+  description: 'Коммерсант" в Пермском крае предлагает полный спектр услуг по купле-продаже объектов недвижимости. На нашем сайте вы найдете свежие новости рынка недвижимости региона, подробное описание наших услуг и сможете легко оставить заявку на понравившийся объект.',
+})
 
 //для первоначального вывода новостей берем из get параметра текущий номер страинцы
 const route = useRoute();

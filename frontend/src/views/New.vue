@@ -11,6 +11,12 @@ const idNew = useRoute().params.id;
 axios.get(routes.articles + '/' + idNew)
   .then(res => {
     article.value = res.data
+
+    document.title = article.value.title + ' — Коммерсант';
+    const meta = document.createElement('meta');
+    meta.name = 'description';
+    meta.content = article.value.description.slice(0, 160);
+    document.head.appendChild(meta);
   })
 
 </script>

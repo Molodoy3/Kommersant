@@ -5,6 +5,12 @@ import {useRoute} from "vue-router";
 import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import Pagination from "@/components/Pagination.vue";
+import {useMeta} from "vue-meta";
+
+useMeta({
+  title: 'Объекты недвижимости — Коммерсант',
+  description: 'Коммерсант" в Пермском крае предлагает полный спектр услуг по купле-продаже объектов недвижимости. На нашем сайте вы найдете свежие новости рынка недвижимости региона, подробное описание наших услуг и сможете легко оставить заявку на понравившийся объект.',
+})
 
 //для первоначального вывода объектов берем из get параметра текущий номер страинцы
 const route = useRoute();
@@ -48,9 +54,9 @@ onMounted(() => {
 const handleScroll = () => {
   const propertiesElement = document.querySelector('.properties');
   if (propertiesElement && window.innerHeight + window.scrollY >= propertiesElement.clientHeight) {
-    //проверяем не привышаем ли общее кол-во страниц
+    //проверяем не превышаем ли общее кол-во страниц
     if (properties.value && currentPage < properties.value.last_page) {
-      //проверяем не привышаем ли лимит загруженных страниц
+      //проверяем не превышаем ли лимит загруженных страниц
       if (currentPage - currentDefaultPage.value < limitPages) {
         //загружаем
         // Проверяем, не идет ли уже загрузка
@@ -84,9 +90,9 @@ const handleScroll = () => {
 
 <template>
   <section id="properties" class="properties">
-    <div v-if="properties" class='properties__container'>
+    <div class='properties__container'>
       <h2 class="properties__title title">Объекты в продаже</h2>
-      <div class="properties__items">
+      <div v-if="properties" class="properties__items">
         <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties.data" class="properties__item">
           <div class="properties__image">
             <picture>
@@ -112,8 +118,8 @@ const handleScroll = () => {
           </div>
         </RouterLink>
       </div>
+      <Preloader v-else/>
     </div>
-    <Preloader v-else />
     <Preloader v-if="isLoading"/>
     <Pagination v-if="!isLoading && properties && properties.links" :links="properties.links"/>
   </section>

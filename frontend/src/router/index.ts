@@ -23,6 +23,7 @@ import CategoryAdd from "@/views/admin/Categories/CategoryAdd.vue";
 import ServicesAdmin from "@/views/admin/Services/ServicesAdmin.vue";
 import ServicesEdit from "@/views/admin/Services/ServicesEdit.vue";
 import ServicesAdd from "@/views/admin/Services/ServicesAdd.vue";
+import Agreements from "@/views/Agreements.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,7 @@ const router = createRouter({
       component: Default, // Используем DefaultLayout как родительский
       children: [
         { path: '', name: 'home', component: Home },
+        { path: '/agreements', name: 'agreements', component: Agreements },
 
         { path: '/news', name: 'news', component: News },
         { path: '/news/:id', name: 'new', component: New },

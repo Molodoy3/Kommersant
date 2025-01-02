@@ -1,13 +1,20 @@
 <script setup lang="ts">
 
-//import axios from "axios";
-import { onMounted, ref, watchEffect, nextTick } from "vue";
+import { ref, watchEffect, nextTick } from "vue";
 import Adv01 from "@/components/icons/Adv-01.vue";
 import Adv02 from "@/components/icons/Adv-02.vue";
 import Adv03 from "@/components/icons/Adv-03.vue";
 import Adv04 from "@/components/icons/Adv-04.vue";
 import axios from "axios";
 import Preloader from "@/components/Preloader.vue";
+import {useMeta} from "vue-meta";
+
+useMeta({
+  title: 'Агентство недвижимости Коммерсант',
+  description: 'Коммерсант" в Пермском крае предлагает полный спектр услуг по купле-продаже объектов недвижимости.' +
+    ' На нашем сайте вы найдете свежие новости рынка недвижимости региона,' +
+    ' подробное описание наших услуг и сможете легко оставить заявку на понравившийся объект.',
+})
 
 let categories = ref<any | null>(null)
 axios.get('/categories', { withCredentials: true })
@@ -81,32 +88,34 @@ watchEffect(async () => {
     </div>
   </section>
   <section id="services" class="services">
-    <div v-if="categories && services" data-tabs class='services__container'>
+    <div data-tabs class='services__container'>
       <h2 class="services__title title">Наши услуги</h2>
-      <div class="services__filter">
-        <ul class="services__filter__wrap">
-          <li v-for="(category, index) in categories">
-            <button :data-filter="category.id" type="button" :class="{ active: index === 0 }">{{ category.name }}
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div class="services__tabs">
-        <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
-             :data-service-id-popup="service.id"
-             v-for="service in services" :data-filter-item="service.category_id" class="services__item">
-          <h5 class="services__title-item">{{ service.title }}</h5>
-          <div class="services__description">{{ service.description }}</div>
-          <div class="services__price">{{ service.price }}₽</div>
+      <div v-if="categories && services" class="services__body">
+        <div class="services__filter">
+          <ul class="services__filter__wrap">
+            <li v-for="(category, index) in categories">
+              <button :data-filter="category.id" type="button" :class="{ active: index === 0 }">{{ category.name }}
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="services__tabs">
+          <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
+               :data-service-id-popup="service.id"
+               v-for="service in services" :data-filter-item="service.category_id" class="services__item">
+            <h5 class="services__title-item">{{ service.title }}</h5>
+            <div class="services__description">{{ service.description }}</div>
+            <div class="services__price">{{ service.price }}₽</div>
+          </div>
         </div>
       </div>
+      <Preloader v-else />
     </div>
-    <Preloader v-else />
   </section>
   <section id="properties" class="properties">
-    <div v-if="properties" class='properties__container'>
+    <div class='properties__container'>
       <h2 class="properties__title title">Объекты в продаже</h2>
-      <div class="properties__items">
+      <div v-if="properties" class="properties__items">
         <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties" class="properties__item">
           <div class="properties__image">
             <picture>
@@ -132,8 +141,8 @@ watchEffect(async () => {
           </div>
         </RouterLink>
       </div>
+      <Preloader v-else />
     </div>
-    <Preloader v-else />
   </section>
   <section class="advantages">
     <div class='advantages__container'>

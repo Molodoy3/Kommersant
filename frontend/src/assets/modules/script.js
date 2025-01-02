@@ -126,16 +126,10 @@ export function delegationClick() {
           const idProperty = dataServicePopup.dataset.propertyIdPopup;
           if (idProperty)
             popup.querySelector('#propertyId').value = idProperty
-        }
-
-        //если торг есть, то открываем поле для торга в попапе
-        const dataBargainingPopup = targetElement.closest("[data-is-bargaining-popup]");
-        if (dataBargainingPopup && dataBargainingPopup === true) {
-          const isBargaining = dataServicePopup.dataset.isBargainingPopup;
-          if (isBargaining) {
-            const inputBargainingText = popup.querySelector('#bargainingText');
-            inputBargainingText.closest('div').classList.remove('form__item_none');
-          }
+            const isBargaining = dataServicePopup.dataset.isBargainingPopup;
+            if (isBargaining) {
+              popup.querySelector('#bargaining').classList.remove('form__item_none')
+            }
         }
 
         e.preventDefault();

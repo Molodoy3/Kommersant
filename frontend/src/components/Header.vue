@@ -22,9 +22,6 @@ import {RouterLink} from "vue-router";
             <li>
               <RouterLink :to="{name: 'news'}" class='menu__link'>Новости</RouterLink>
             </li>
-<!--            <li>
-              <RouterLink to="" class='menu__link'>Контакты</RouterLink>
-            </li>-->
             <li>
               <button data-button-for-open-custom-popup="application" class="header__connect-mobile button" type="button">Связаться</button>
             </li>

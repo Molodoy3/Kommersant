@@ -19,33 +19,30 @@ import Vk from "@/components/icons/Vk.vue";
         </RouterLink>
         <div class="footer__links">
           <ul class="footer__social-list">
-            <li><a href="">
+            <li><a target="_blank" href="https://t.me/Kommersant59">
                 <tg />
               </a></li>
-            <li><a href="">
+            <li><a target="_blank" href="https://vk.com/kommersant007">
                 <vk />
               </a></li>
-            <li><a href=""><whats-app /></a></li>
+<!--            <li><a href=""><whats-app /></a></li>-->
           </ul>
           <ul class="footer__list">
             <li>
-              <RouterLink to="">Объекты</RouterLink>
+              <RouterLink :to="{name: 'properties'}">Объекты</RouterLink>
             </li>
             <li>
-              <RouterLink to="">Услуги</RouterLink>
+              <RouterLink to="/#services">Услуги</RouterLink>
             </li>
             <li>
-              <RouterLink to="">Новости</RouterLink>
-            </li>
-            <li>
-              <RouterLink to="">Контакты</RouterLink>
+              <RouterLink :to="{name: 'news'}">Новости</RouterLink>
             </li>
           </ul>
         </div>
       </div>
       <div class="footer__bottom">
         <div class="footer__org">© 2024 КОММЕРСАНТ. Все права защищены.</div>
-        <RouterLink class="footer__policy" to="">Политика конфидициальности</RouterLink>
+        <RouterLink class="footer__policy" :to="{name: 'agreements'}">Политика конфиденциальности</RouterLink>
       </div>
     </div>
   </footer>

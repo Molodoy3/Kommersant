@@ -19,7 +19,7 @@ axios.get(routes.services)
 <template>
   <div class="admin-panel__top">
     <h1 class="admin-panel__title title">Услуги</h1>
-    <RouterLink :to="{name: 'admin_categories_add'}" class="admin-panel__add button">Добавить</RouterLink>
+    <RouterLink :to="{name: 'admin_services_add'}" class="admin-panel__add button">Добавить</RouterLink>
   </div>
   <table v-if="services" class="admin-panel__table">
     <thead class="admin-panel__header-table">

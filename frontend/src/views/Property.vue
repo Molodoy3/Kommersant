@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRoute } from "vue-router";
-import { nextTick, ref, watchEffect } from "vue";
+import {nextTick, ref, watchEffect} from "vue";
 import Preloader from "@/components/Preloader.vue";
 import { Swiper } from 'swiper';
 import { Navigation, Pagination, Keyboard, Mousewheel, Thumbs } from 'swiper/modules';
@@ -15,32 +15,16 @@ const property = ref<any | null>(null);
 axios.get(routes.properties + '/' + idProperty)
   .then(res => {
     property.value = res.data
+
+    document.title = property.value.name + ' — Коммерсант';
+    const meta = document.createElement('meta');
+    meta.name = 'description';
+    meta.content = property.value.description.slice(0, 160);
+    document.head.appendChild(meta);
   }).catch(error => {
     console.log(error)
   })
 
-/*onMounted(() => {
-   const script = document.createElement('script');
-  script.src = "https://api-maps.yandex.ru/v3/?apikey=435f424d-08d3-4002-ab0b-81fd922114ec&lang=ru_RU";
-  script.async = true;
-  script.onload = () => {
-    this.initMap();
-  };
-  document.head.appendChild(script);
-
-  initMap();
-  async function initMap() {
-    await ymaps3.ready;
-    const { YMap, YMapDefaultSchemeLayer } = ymaps3;
-    const map = new YMap(
-      document.getElementById('map'),
-      {
-        location: { center: [37.588144, 55.733842], zoom: 10 }
-      }
-    );
-    map.addChild(new YMapDefaultSchemeLayer());
-  }
-});*/
 
 interface Label {
   id: number;
@@ -221,7 +205,6 @@ watchEffect(async () => {
 
   &__slide {
     flex-shrink: 0;
-    background-color: #c01010;
     position: relative;
 
     img {

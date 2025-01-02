@@ -26,14 +26,14 @@ body {
 .rent {
     color: var(--yellow);
 }
-.item-image-close{
+.item-image-close {
     position: absolute;
     top: rem(5);
     right: rem(5);
     cursor: pointer;
     width: rem(17);
     background-color: rgba(255, 255, 255, 0.24);
-    transition: transform .3s ease;
+    transition: transform 0.3s ease;
     &:focus {
         transform: scale(1.1);
     }
@@ -43,11 +43,13 @@ body {
         }
     }
 }
-[class*="__image"], .item-image {
+[class*="__image"],
+.item-image {
     position: relative;
     overflow: hidden;
 }
-[class*="__image"]:has(img[lazy="loading"]), .item-image:has(img[lazy="loading"]) {
+[class*="__image"]:has(img[lazy="loading"]),
+.item-image:has(img[lazy="loading"]) {
     &::after {
         content: "";
         position: absolute;
@@ -112,7 +114,7 @@ section {
     @include adaptiv-value("margin-bottom", 40, 20, 1);
     line-height: 135%;
 }
-button{
+button {
     font-size: inherit;
 }
 .button {
@@ -135,8 +137,8 @@ button{
 }
 /*=============================================================================================================*/
 /*=============================================================================================================*/
-.item-image{
-    @include adaptiv-value('width', 200, 150, 1);
+.item-image {
+    @include adaptiv-value("width", 200, 150, 1);
     img {
         max-width: 100%;
     }
@@ -146,7 +148,7 @@ button{
         margin-bottom: rem(20);
         display: flex;
         flex-wrap: wrap;
-        @include adaptiv-value('gap', 15, 10, 1);
+        @include adaptiv-value("gap", 15, 10, 1);
     }
     &__item {
         @include adaptiv-value("margin-bottom", 18, 12, 1);
@@ -159,8 +161,8 @@ button{
         color: var(--red);
         margin-top: rem(3);
     }
-    &__image{
-        @include adaptiv-value('width', 200, 150, 1);
+    &__image {
+        @include adaptiv-value("width", 200, 150, 1);
         margin-bottom: rem(10);
         img {
             max-width: 100%;
@@ -266,8 +268,6 @@ button{
 }
 
 .admin-panel {
-
-
     flex: 1 1 auto;
     padding: rem(30) 0;
     @media (max-width: $md3) {
@@ -275,15 +275,15 @@ button{
     }
     display: flex;
     flex-direction: column;
-    &__top{
-        @media (min-width: $md3){
+    &__top {
+        @media (min-width: $md3) {
             display: flex;
             justify-content: space-between;
 
             column-gap: rem(15);
         }
     }
-    &__delete{
+    &__delete {
         background-color: var(--red);
         margin-top: rem(10);
         transition: background-color 0.3s ease;
@@ -291,13 +291,13 @@ button{
             background-color: rgb(218, 0, 0);
         }
         @media (any-hover: hover) {
-            &:hover{
+            &:hover {
                 background-color: rgb(218, 0, 0);
             }
         }
     }
-    &__add{
-        @media (min-width: $md3){
+    &__add {
+        @media (min-width: $md3) {
             align-self: center;
             width: auto !important;
         }
@@ -305,10 +305,10 @@ button{
     &__container {
         max-width: rem(1700);
     }
-    &__form{
+    &__form {
         max-width: rem(600);
     }
-    textarea{
+    textarea {
         resize: vertical;
         min-height: rem(100);
         max-height: rem(400);
@@ -352,7 +352,7 @@ button{
         display: flex;
         @include adaptiv-value("column-gap", 30, 10, 1);
     }
-    .button{
+    .button {
         width: 100%;
     }
     &__menu {
@@ -423,12 +423,12 @@ button{
     &__content {
         flex: 1 1 auto;
     }
-    &__wrap{
+    &__wrap {
         overflow-x: auto;
         max-width: rem(1600);
     }
     &__table {
-        @include adaptiv-value('font-size', 13.5, 10, 1);
+        @include adaptiv-value("font-size", 13.5, 10, 1);
         border-collapse: collapse;
         background-color: var(--white);
         border: rem(1) solid #cfcfcf;
@@ -446,28 +446,73 @@ button{
     }
 }
 
-
 .properties {
     &__labels {
-      display: flex;
-      flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
 
-      @media (min-width: $md3) {
+        @media (min-width: $md3) {
+            justify-content: flex-end;
+        }
 
-        justify-content: flex-end;
-      }
-
-      justify-content: center;
-      gap: rem(5);
+        justify-content: center;
+        gap: rem(5);
     }
 
     &__label {
-      padding: rem(6) rem(15);
-      color: var(--white);
-      text-transform: uppercase;
-      font-weight: 600;
-      font-size: rem(10);
-      background-color: var(--yellow);
-      border-radius: rem(6);
+        padding: rem(6) rem(15);
+        color: var(--white);
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: rem(10);
+        background-color: var(--yellow);
+        border-radius: rem(6);
     }
-  }
+}
+
+.agreements {
+    @include adaptiv-value('padding-top', 50, 30, 1);
+    &__container {
+    }
+    a {
+        color: var(--yellow);
+        transition: color 0.3s ease;
+        &:focus {
+            color: var(--yellow-hover2);
+        }
+        @media (any-hover: hover) {
+            &:hover{
+                color: var(--yellow-hover2);
+            }
+        }
+    }
+    &__title {
+        max-width: rem(800);
+        margin: 0 auto;
+        @include adaptiv-value('margin-bottom', 40, 20, 1);
+    }
+    * {
+
+        line-height: 140%;
+    }
+    &__list {
+        li {
+
+            margin-left: rem(20);
+            &:not(:last-child) {
+                margin-bottom: em(10, 16);
+            }
+        }
+        @include adaptiv-value('margin-bottom', 20, 10, 1);
+
+    }
+
+    &__title-list {
+        font-weight: 700;
+        @include adaptiv-value('font-size', 20, 18, 1);
+        display: inline-block;
+        @include adaptiv-value('margin-bottom', 15, 10, 1);
+    }
+}
+.title {
+}
