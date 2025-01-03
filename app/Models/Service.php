@@ -21,7 +21,9 @@ class Service extends Model
     }
     public function getPriceAttribute($value): string
     {
-        return number_format($value, 0, '.', ' ');
+        if (!$value)
+            return 'Договорная';
+        return number_format($value, 0, '.', ' ') . '₽';
     }
     public function getCreatedAtAttribute($value): ?string
     {

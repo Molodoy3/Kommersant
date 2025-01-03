@@ -24,21 +24,23 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'UltraMegaUser',
+            'email' => 'artem.nikonov.2005@bk.ru',
+            'password' => 'jkl&_)&4;lkj:LLJ34I'
         ]);
+        /*
         Article::factory()->count(100)->create();
         Category::factory()->count(3)->create();
-        Service::factory()->count(20)->create();
+        Service::factory()->count(20)->create();*/
 
         //все для недвижимости
-        TypeProperty::factory()->customLabels()->create();
+        /*TypeProperty::factory()->customLabels()->create();
         TypeProperty::factory()->customPriceLabel()->create();
         TransactionType::factory()->customLabels()->create();
         TransactionType::factory()->customPriceLabel()->create();
         Property::factory()->count(20)->create();
         Label::factory()->customLabels()->create(); // Создает лейбл "Торг"
         Label::factory()->customPriceLabel()->create(); // Создает лейбл "Своя цена"
-        PropertyLabel::factory()->count(5)->create();
+        PropertyLabel::factory()->count(5)->create();*/
     }
 }

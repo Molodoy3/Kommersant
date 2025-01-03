@@ -7,7 +7,7 @@ import Adv03 from "@/components/icons/Adv-03.vue";
 import Adv04 from "@/components/icons/Adv-04.vue";
 import axios from "axios";
 import Preloader from "@/components/Preloader.vue";
-import {useMeta} from "vue-meta";
+import { useMeta } from "vue-meta";
 
 useMeta({
   title: 'Агентство недвижимости Коммерсант',
@@ -101,11 +101,11 @@ watchEffect(async () => {
         </div>
         <div class="services__tabs">
           <div data-button-for-open-custom-popup="application" :data-service-popup="service.title"
-               :data-service-id-popup="service.id"
-               v-for="service in services" :data-filter-item="service.category_id" class="services__item">
+            :data-service-id-popup="service.id" v-for="service in services" :data-filter-item="service.category_id"
+            class="services__item">
             <h5 class="services__title-item">{{ service.title }}</h5>
             <div class="services__description">{{ service.description }}</div>
-            <div class="services__price">{{ service.price }}₽</div>
+            <div class="services__price">{{ service.price }}</div>
           </div>
         </div>
       </div>
@@ -116,17 +116,18 @@ watchEffect(async () => {
     <div class='properties__container'>
       <h2 class="properties__title title">Объекты в продаже</h2>
       <div v-if="properties" class="properties__items">
-        <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties" class="properties__item">
+        <RouterLink :to="{ name: 'property', params: { id: property.id } }" v-for="property in properties"
+          class="properties__item">
           <div class="properties__image">
             <picture>
               <source :srcset='property.image + ".webp"' :type='"image/webp"'>
-              <source :srcset='property.image + "." + property.image_extension' :type='"image/" + property.image_extension'>
+              <source :srcset='property.image + "." + property.image_extension'
+                :type='"image/" + property.image_extension'>
               <img v-lazy='property.image + ".webp"' alt='объект недвижимости'>
             </picture>
             <div class="properties__labels">
-              <div
-                :style="'background-color: #' + label.color"
-                v-for="label in property.labels" class="properties__label">{{ label.name }}</div>
+              <div :style="'background-color: #' + label.color" v-for="label in property.labels"
+                class="properties__label">{{ label.name }}</div>
             </div>
           </div>
           <div class="properties__content">
@@ -219,7 +220,6 @@ watchEffect(async () => {
       </div>
     </div>
   </section>
-
 </template>
 
 <style scoped lang="scss">
@@ -246,19 +246,22 @@ watchEffect(async () => {
     display: flex;
     flex-direction: column;
     transition: transform 0.4s ease-out;
+
     &:focus {
-        transform: scale(1.1);
+      transform: scale(1.1);
     }
+
     @media (any-hover: hover) {
-        &:hover{
-            transform: scale(1.05);
-        }
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
   &__image {
     @include adaptiv-value('height', 210, 170, 1);
     position: relative;
+
     img {
       position: absolute;
       top: 0;
@@ -268,11 +271,13 @@ watchEffect(async () => {
       object-fit: cover;
     }
   }
-  &__title-item{
+
+  &__title-item {
     color: var(--blue);
     margin-bottom: em(10, 16);
     font-weight: 700;
   }
+
   &__labels {
     position: absolute;
     top: rem(15);
@@ -281,12 +286,14 @@ watchEffect(async () => {
     flex-wrap: wrap;
     gap: rem(5);
   }
-  &__content{
+
+  &__content {
     padding-top: rem(13);
     @include adaptiv-value('padding-left', 20, 10, 1);
     @include adaptiv-value('padding-right', 20, 10, 1);
     @include adaptiv-value('padding-bottom', 25, 15, 1);
   }
+
   &__label {
     padding: rem(6) rem(15);
     color: var(--white);
@@ -326,8 +333,23 @@ watchEffect(async () => {
     flex-wrap: wrap;
     justify-content: center;
 
+    li {
+      flex: 1 1 auto;
+      @media (min-width: $md4){
+        &:not(:last-child) {
+          border-right: rem(1) solid #cca91d50;
+      }
+      }
+
+      @media (max-width: $md4) {
+        width: 100%;
+        flex: 1 1 auto;
+      }
+    }
+
     button {
       font-weight: 500;
+      width: 100%;
       background-color: var(--white);
       @include adaptiv-value('padding-top', 13, 10, 1);
       @include adaptiv-value('padding-bottom', 13, 10, 1);

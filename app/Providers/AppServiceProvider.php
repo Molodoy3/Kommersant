@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         //ставим ограничение в 60 запросов в минуту на один ip
         RateLimiter::for('api', function (Request $request) {
             //return false;
-            return Limit::perMinute(60)->by($request->ip());
+            return Limit::perMinute(200)->by($request->ip());
         });
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }

@@ -30,6 +30,10 @@ interface Label {
   id: number;
 }
 
+function formattedText(text) {
+  return text.replace(/\n/g, '<br><br>');
+}
+
 watchEffect(async () => {
   if (property.value) {
 
@@ -147,7 +151,7 @@ watchEffect(async () => {
       </div>
       <div class="property__description">
         <h2 class="property__sub-title">Описание</h2>
-        {{ property.description }}
+        <div class="property__description-text" v-html="formattedText(property.description)"></div>
       </div>
       <div class="property__geo">
         <h2 class="property__sub-title">Расположение на карте</h2>

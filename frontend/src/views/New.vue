@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import { useRoute } from "vue-router";
-import { ref } from "vue";
+import {useRoute} from "vue-router";
+import {ref} from "vue";
 import axios from "axios";
 import {routes} from "@/api.config.js";
 
@@ -18,6 +18,10 @@ axios.get(routes.articles + '/' + idNew)
     meta.content = article.value.description.slice(0, 160);
     document.head.appendChild(meta);
   })
+
+function formattedText(text) {
+    return text.replace(/\n/g, '<br><br>');
+}
 
 </script>
 
@@ -37,9 +41,7 @@ axios.get(routes.articles + '/' + idNew)
           <div class="new__date">{{ article.created_at }}</div>
         </div>
       </div>
-      <div class="new__text">
-        {{ article.description }}
-      </div>
+      <div class="new__text" v-html="formattedText(article.description)"></div>
     </div>
   </section>
 </template>
@@ -50,6 +52,7 @@ axios.get(routes.articles + '/' + idNew)
 
 .new {
   @include adaptiv-value('padding-top', 60, 25, 1);
+
   &__container {
     background-color: var(--white);
     @include adaptiv-value('padding-top', 30, 20, 1);
@@ -60,7 +63,7 @@ axios.get(routes.articles + '/' + idNew)
   }
 
   &__header {
-    @media (min-width: 600px){
+    @media (min-width: 600px) {
       display: flex;
       justify-content: space-between;
       column-gap: rem(20);
@@ -75,9 +78,10 @@ axios.get(routes.articles + '/' + idNew)
     min-height: rem(200);
     @include adaptiv-value('border-radius', 18, 12, 1);
     overflow: hidden;
-    @media (max-width: 600px){
+    @media (max-width: 600px) {
       margin-bottom: rem(20);
     }
+
     img {
       position: absolute;
       top: 0;
@@ -92,9 +96,9 @@ axios.get(routes.articles + '/' + idNew)
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    @media (min-width: 600px){
+    @media (min-width: 600px) {
 
-    align-items: flex-end;
+      align-items: flex-end;
     }
 
   }
@@ -102,8 +106,8 @@ axios.get(routes.articles + '/' + idNew)
   &__title {
     @include adaptiv-value('margin-bottom', 95, 20, 1);
     flex: 1 1 auto;
-    @media (min-width: 600px){
-        text-align: right;
+    @media (min-width: 600px) {
+      text-align: right;
     }
     max-width: rem(534);
   }
@@ -117,6 +121,7 @@ axios.get(routes.articles + '/' + idNew)
     border-radius: rem(4);
   }
 
-  &__text {}
+  &__text {
+  }
 }
 </style>

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('telephone', 20);
             $table->string('comment', 500);
-            $table->foreignIdFor(Service::class)->nullable()->constrained();
-            $table->foreignIdFor(Property::class)->nullable()->constrained();
+            $table->foreignIdFor(Service::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Property::class)->nullable()->constrained()->cascadeOnDelete();
             $table->decimal('user_price', 8, 2)->nullable();
             $table->timestamps();
         });

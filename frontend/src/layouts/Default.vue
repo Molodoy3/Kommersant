@@ -156,7 +156,7 @@ async function submitApplication() {
             <button class="button-border" type="submit">Отправить</button>
           </form>
           <div class="window-application__privacy">
-            Нажимая на кнопку, вы даете свое <RouterLink to="">согласие на обработку персональных данных</RouterLink>
+            Нажимая на кнопку, вы даете свое <RouterLink target="_blank" :to="{name: 'agreements'}">согласие на обработку персональных данных</RouterLink>
           </div>
         </div>
       </div>
